@@ -1,75 +1,195 @@
 'use client'
-import { Flex,  } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { Input, Button } from "@nextui-org/react";
 import { EnvelopeClosedIcon, LockClosedIcon, PersonIcon, EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons'
 import logo from "../../../public/images/HorizontalOriginal.png";
+import { useForm, Controller } from "react-hook-form";
 import Image from "next/image";
 import React from 'react'
 
 
 function SignUpForm() {
+
+    const { control, handleSubmit, formState: { errors } } = useForm(
+        {
+            defaultValues: {
+                email: '',
+                password: '',
+                name: '',
+                lastname: ''
+            }
+        }
+    );
+
+    const onSubmit = handleSubmit(data => {
+        console.log(data);
+    });
+
     const [isVisible, setIsVisible] = React.useState(false);
 
     const toggleVisibility = () => setIsVisible(!isVisible);
     return (
-        <Flex direction="column" gap="3">
-            <Image
-                src={logo}
-                height={700}
-                alt="image login"
-                width={700}
-                className="object-cover justify-center items-center mx-auto"
-            />
-            <Input
-                isRequired
-                type="text"
-                label="Nombres"
-                placeholder="Mario"
-                autoFocus
-                startContent={
-                    <PersonIcon height="16" width="16" />
+        <form onSubmit={onSubmit}>
+            <Flex direction="column" gap="3">
+                <Image
+                    src={logo}
+                    height={700}
+                    alt="image login"
+                    width={700}
+                    className="object-cover justify-center items-center mx-auto"
+                />
+                <Controller
+                    name='name'
+                    control={control}
+                    rules={
+                        {
+                            required: {
+                                message: 'El nombre es requerido',
+                                value: true,
+                            },
+                        }
+                    }
+                    render={({ field }) => {
+                        return (
+                            <Input
+                                isRequired
+                                {...field}
+                                type="text"
+                                label="Nombres"
+                                placeholder="Mario"
+                                autoFocus
+                                startContent={
+                                    <PersonIcon height="16" width="16" />
+                                }
+                            />
+                        )
+                    }}
+                />
+                {
+                    errors.name && (
+                        <Text color='ruby' className='text-xs'>
+                            {errors.name.message}
+                        </Text>
+                    )
                 }
-            />
-            <Input
-                isRequired
-                type="text"
-                label="Apellidos"
-                placeholder="Zandoval"
-                startContent={
-                    <PersonIcon height="16" width="16" />
+                <Controller
+                    name='lastname'
+                    control={control}
+                    rules={
+                        {
+                            required: {
+                                message: 'El apellido es requerido',
+                                value: true,
+                            },
+                        }
+                    }
+                    render={({ field }) => {
+                        return (
+                            <Input
+                                isRequired
+                                {...field}
+                                type="text"
+                                label="Apellidos"
+                                placeholder="Zandoval"
+                                startContent={
+                                    <PersonIcon height="16" width="16" />
+                                }
+                            />
+                        )
+                    }}
+                />
+                {
+                    errors.lastname && (
+                        <Text color='ruby' className='text-xs'>
+                            {errors.lastname.message}
+                        </Text>
+                    )
                 }
-            />
-            <Input
-                isRequired
-                type="email"
-                label="Correo Electrónico"
-                placeholder="you@example.com"
-                startContent={
-                    <EnvelopeClosedIcon height="16" width="16" />
+                <Controller
+                    name='email'
+                    control={control}
+                    rules={
+                        {
+                            required: {
+                                message: 'El correo electrónico es requerido',
+                                value: true,
+                            },
+                        }
+                    }
+                    render={({ field }) => {
+                        return (
+                            <Input
+                                isRequired
+                                {...field}
+                                type="email"
+                                label="Correo Electrónico"
+                                placeholder="you@example.com"
+                                startContent={
+                                    <EnvelopeClosedIcon height="16" width="16" />
+                                }
+                            />
+                        )
+                    }}
+                />
+                {
+                    errors.email && (
+                        <Text color='ruby' className='text-xs'>
+                            {errors.email.message}
+                        </Text>
+                    )
                 }
-            />
-           <Input
-                isRequired
-                label="Contraseña"
-                placeholder="********"
-                startContent={
-                    <LockClosedIcon height="16" width="16" />
+                <Controller
+                    name='password'
+                    control={control}
+                    rules={
+                        {
+                            required: {
+                                value: true,
+                                message: 'La contraseña es requerida'
+                            },
+                            minLength: {
+                                value: 6,
+                                message: 'La contraseña debe tener al menos 6 caracteres'
+                            }
+                        }
+                    }
+                    render={({ field }) => {
+                        return (
+                            <Input
+                                isRequired
+                                {...field}
+                                label="Contraseña"
+                                placeholder="********"
+                                startContent={
+                                    <LockClosedIcon height="16" width="16" />
+                                }
+                                endContent={
+                                    <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                                        {isVisible ? (
+                                            <EyeOpenIcon className="text-2xl text-default-400 pointer-events-none" />
+                                        ) : (
+                                            <EyeClosedIcon className="text-2xl text-default-400 pointer-events-none" />
+                                        )}
+                                    </button>
+                                }
+                                type={isVisible ? "text" : "password"}
+                            />
+                        )
+                    }}
+                />
+                {
+                    errors.password && (
+                        <Text color='ruby' className='text-xs'>
+                            {errors.password.message}
+                        </Text>
+                    )
+                
                 }
-                endContent={
-                    <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
-                        {isVisible ? (
-                            <EyeOpenIcon className="text-2xl text-default-400 pointer-events-none" />
-                        ) : (
-                            <EyeClosedIcon className="text-2xl text-default-400 pointer-events-none" />
-                        )}
-                    </button>
-                }
-                type={isVisible ? "text" : "password"}
-            />
-            <Button color='warning' className='text-white'>
-                Regístrate
-            </Button>
-        </Flex>
+                <Button type="submit" color='warning' className='text-white'>
+                    Regístrate
+                </Button>
+            </Flex>
+        </form>
     )
 }
 

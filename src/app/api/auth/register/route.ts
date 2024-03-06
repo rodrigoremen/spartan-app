@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/libs/prisma';
+import bcrypt from 'bcrypt';
 
 export async function POST(request: Request) {
 	const data = await request.json();
-	console.log(data);
+
+	const salt = await bcrypt.genSalt(10);
+	data.password = await bcrypt.hash(data.password, salt);
 
 	const newUser = await prisma.user.create({
 		data: {
@@ -14,5 +17,7 @@ export async function POST(request: Request) {
 		},
 	});
 
-	return NextResponse.json(newUser, { status: 201 });
+	const { password, ...user } = newUser;
+
+	return NextResponse.json(user, { status: 201 });
 }

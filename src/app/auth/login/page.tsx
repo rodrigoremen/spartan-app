@@ -15,11 +15,11 @@ function LoginPage() {
                         <SignInForm />
                         <Flex justify="between" my="4">
                             <Text>
-                                Ya tienes una cuenta?
+                                No tienes cuenta?
                             </Text>
                             <Link asChild>
                                 <NavLink href="/auth/register" passHref>
-                                    Inicia Sesión
+                                    Regístrate!
                                 </NavLink>
                             </Link>
                         </Flex>

@@ -2,8 +2,9 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { Input, Button } from "@nextui-org/react";
 import { EnvelopeClosedIcon, LockClosedIcon, PersonIcon, EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons'
-import logo from "../../../public/images/HorizontalOriginal.png";
 import { useForm, Controller } from "react-hook-form";
+import axios from "axios";
+import logo from "../../../public/images/HorizontalOriginal.png";
 import Image from "next/image";
 import React from 'react'
 
@@ -21,8 +22,11 @@ function SignUpForm() {
         }
     );
 
-    const onSubmit = handleSubmit(data => {
+    const onSubmit = handleSubmit(async (data) => {
         console.log(data);
+
+        const resp = await axios.post('/api/auth/register', data)
+        console.log(resp)
     });
 
     const [isVisible, setIsVisible] = React.useState(false);

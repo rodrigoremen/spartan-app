@@ -4,6 +4,8 @@ import Providers from './providers';
 import { Theme } from '@radix-ui/themes';
 import './globals.css';
 import '@radix-ui/themes/styles.css';
+import NavBar from '@/components/NavBar';
+import ContextProvider from "@/context/GlobalContext";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,12 +22,16 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={inter.className}>
-				<Providers>
-					<main className="dark text-foreground bg-background">
-					<Theme>{children}</Theme>
-					</main>
-				
-				</Providers>
+				<ContextProvider>
+					<Providers>
+						<main className="text-foreground bg-background">
+							<Theme>
+								<NavBar />
+								{children}
+							</Theme>
+						</main>
+					</Providers>
+				</ContextProvider>
 			</body>
 		</html>
 	);

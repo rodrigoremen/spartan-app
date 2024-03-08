@@ -7,6 +7,8 @@ import axios from "axios";
 import logo from "../../../public/images/HorizontalOriginal.png";
 import Image from "next/image";
 import React from 'react'
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 
 function SignUpForm() {
@@ -21,11 +23,28 @@ function SignUpForm() {
             }
         }
     );
+    const router = useRouter();
 
     const onSubmit = handleSubmit(async (data) => {
-        console.log(data);
-
         const resp = await axios.post('/api/auth/register', data)
+        
+        if (resp.status === 201) {
+            const result = await signIn('credentials', {
+                redirect: false,
+                email: resp.data.email,
+                password: data.password
+            });
+
+            if (!result?.ok) {
+                console.log(result?.error);
+                return;
+            }
+
+            router.push('/dashboard');
+        }
+        
+        console.log(data);
+        
         console.log(resp)
     });
 

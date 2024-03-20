@@ -1,11 +1,12 @@
 'use client'
 import React from 'react'
-import { Input, Textarea, Button, Select, SelectItem } from "@nextui-org/react";
-import { Card, Container, Heading } from '@radix-ui/themes';
 import DatePicker from '@/components/DatePicker';
-import { EnvelopeClosedIcon, PersonIcon, MobileIcon } from "@radix-ui/react-icons";
 import ModalAgregarServicio from '@/components/ModalAgregarServicio';
 import TablaServicios from '@/components/TablaServicios';
+import axios from 'axios';
+import { Input, Textarea, Button, Select, SelectItem } from "@nextui-org/react";
+import { Card, Container, Heading } from '@radix-ui/themes';
+import { EnvelopeClosedIcon, PersonIcon, MobileIcon } from "@radix-ui/react-icons";
 import { normas } from '@/components/data/Normas';
 import { useForm, Controller } from 'react-hook-form';
 
@@ -42,9 +43,10 @@ function NewProjectPage() {
     setServicios((prevServicios: any[]) => [...prevServicios, servicio]);
   };
 
-  const onSubmit = handleSubmit(data => {
+  const onSubmit = handleSubmit(async (data) => {
     const newData = { ...data, servicios };
-    console.log(newData);
+    const resp = await axios.post('/api/projects', newData)
+    console.log(resp);
   });
 
   return (

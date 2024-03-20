@@ -19,16 +19,23 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   projects  Project[]
+  // roleId    Int
+  // role      Role      @relation(fields: [roleId], references: [id])
 }
+
+// model Role {
+//   id    Int    @id @default(autoincrement())
+//   name  String @unique
+//   users User[]
+// }
 
 model Project {
   id            Int       @id @default(autoincrement())
   revision      Float
-  folio         String
+  folio         String @unique
   cliente       String
   proyecto      String
-  startDate     DateTime
-  endDate       DateTime
+  fechaEntrega  DateTime
   email         String
   telefono      String
   elaborado     String
@@ -45,7 +52,7 @@ model Project {
   updatedAt     DateTime  @updatedAt
   userId        Int
   user          User      @relation(fields: [userId], references: [id])
-  servicios     Service[] 
+  servicios     Service[]
 }
 
 model Service {

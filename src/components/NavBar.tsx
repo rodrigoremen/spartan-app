@@ -8,15 +8,12 @@ import {
     NavbarContent,
     NavbarItem,
     Link,
-    Input,
     Avatar,
     Dropdown,
     DropdownTrigger,
     DropdownMenu,
     DropdownItem,
-    Button,
 } from '@nextui-org/react';
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import LogoSpartan from './icons/Logo';
 import { useSession, signOut } from 'next-auth/react';
 import React from 'react';
@@ -73,11 +70,23 @@ function NavBar() {
                     }
                     {
                         session && (
+                            <>
                             <NavbarItem>
-                                <Link href="/dashboard" aria-current="page" color="foreground" className='font-bold'>
+                                <Link href="/inicio" aria-current="page" color="foreground" className='font-bold'>
                                     Dashboard
                                 </Link>
                             </NavbarItem>
+                            <NavbarItem>
+                                <Link href="/dashboard" aria-current="page" color="foreground" className='font-bold'>
+                                    Proyectos
+                                </Link>
+                            </NavbarItem>
+                            <NavbarItem>
+                                    <Link href="/reports" color="foreground" className='font-bold'>
+                                        Reportes
+                                    </Link>
+                                </NavbarItem>
+                            </>
                         )
                     }
                 </NavbarContent>
@@ -88,20 +97,7 @@ function NavBar() {
                 </NavbarItem>
                 {
                     session && (
-                        <>
-                            <Input
-                                classNames={{
-                                    base: 'max-w-full sm:max-w-[10rem] h-10',
-                                    mainWrapper: 'h-full',
-                                    input: 'text-small',
-                                    inputWrapper:
-                                        'h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20',
-                                }}
-                                placeholder="Type to search..."
-                                size="sm"
-                                startContent={<MagnifyingGlassIcon height="18" width="18" />}
-                                type="search"
-                            />
+                        <>           
                             <Dropdown placement="bottom-end">
                                 <DropdownTrigger>
                                     <Avatar
@@ -112,6 +108,7 @@ function NavBar() {
                                         name="Jason Hughes"
                                         size="sm"
                                         src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                                        
                                     />
                                 </DropdownTrigger>
                                 <DropdownMenu aria-label="Profile Actions" variant="flat">

@@ -15,7 +15,7 @@ function ModalAgregarServicio({ agregarServicio }: { agregarServicio: any }) {
 
     return (
         <>
-            <Button onPress={onOpen} color="warning" className="text-white">Agregar servicio</Button>
+            <Button onPress={onOpen} color="warning" variant="flat">Agregar servicio</Button>
             <Modal
                 backdrop={"blur"}
                 isOpen={isOpen}

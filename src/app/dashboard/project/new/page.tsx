@@ -6,9 +6,10 @@ import TablaServicios from '@/components/TablaServicios';
 import axios from 'axios';
 import { Input, Textarea, Button, Select, SelectItem } from "@nextui-org/react";
 import { Card, Container, Heading } from '@radix-ui/themes';
-import { EnvelopeClosedIcon, PersonIcon, MobileIcon } from "@radix-ui/react-icons";
+import { EnvelopeClosedIcon, PersonIcon, MobileIcon, TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { normas } from '@/components/data/Normas';
 import { useForm, Controller } from 'react-hook-form';
+import { useRouter, useParams } from "next/navigation";
 
 
 function NewProjectPage() {
@@ -37,16 +38,27 @@ function NewProjectPage() {
       }
     }
   )
-  const [servicios, setServicios] = React.useState<any[]>([])
+  const router = useRouter();
+  const params = useParams();
 
+  const [servicios, setServicios] = React.useState<any[]>([])
   const agregarServicio = (servicio: any) => {
     setServicios((prevServicios: any[]) => [...prevServicios, servicio]);
   };
 
   const onSubmit = handleSubmit(async (data) => {
     const newData = { ...data, servicios };
-    const resp = await axios.post('/api/projects', newData)
-    console.log(resp);
+
+    if (!params.projectid) {
+      const resp = await axios.post('/api/projects', newData)
+      if (resp.status === 201) {
+        router.push('/dashboard')
+      }
+      console.log(resp);
+    } else {
+      console.log('editando proyecto')
+    }
+
   });
 
   return (
@@ -55,7 +67,7 @@ function NewProjectPage() {
         <Card className=' p-5'>
           <form onSubmit={onSubmit} className='flex flex-col gap-y-4'>
             <Heading>
-              Crear nuevo proyecto
+              {params.projectid ? 'Editar proyecto' : 'Nuevo proyecto'}
             </Heading>
             <div className='flex gap-x-3'>
               <Controller
@@ -328,10 +340,19 @@ function NewProjectPage() {
                 )
               }}
             />
-            <Button type='submit' color="warning" className='text-white w-72  mx-auto'>
-              Agregar proyecto
+            <Button type='submit' variant='flat' color="warning" className='mx-auto' startContent={<Pencil2Icon/>}>
+              {params.projectid ? 'Editar proyecto' : 'Crear proyecto'}
             </Button>
           </form>
+          <div className='flex justify-end my-4'>
+          {
+            params.projectid && (
+              <Button color='danger' variant='flat' className='mx-auto' startContent={<TrashIcon/>}>
+                Eliminar proyecto
+              </Button>
+            )
+          }
+          </div>
         </Card>
       </Container>
     </div>

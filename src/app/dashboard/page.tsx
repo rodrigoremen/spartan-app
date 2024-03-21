@@ -1,18 +1,25 @@
-'use client'
 import React from 'react'
-import { Container, Heading } from '@radix-ui/themes'
-import { Button } from '@nextui-org/react'
-import { useRouter } from 'next/navigation'
+import { Container, Grid } from '@radix-ui/themes'
+import HeaderDashboard from '@/components/dashboard/HeaderDashboard'
+import prisma from "@/libs/prisma";
+import ProjectCard from '@/components/projects/ProjectCard';
 
-function DashboardPage() {
-  const router = useRouter()
+async function loadProjects() {
+  return await prisma.project.findMany()
+}
+
+async function DashboardPage() {
+  const projects = await loadProjects()
+  console.log(projects)
   return (
     <Container className='mt-10'>
-      <div className='justify-between flex'>
-        <Heading>Crear nuevo proyecto</Heading>
-        <Button onClick={() => router.push('/dashboard/project/new')} color="warning" className='text-white'>
-          Crear
-        </Button>
+      <HeaderDashboard />
+      <div className='mt-10'>
+        <Grid columns="3" className='gap-3'>
+          {projects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+        </Grid>
       </div>
     </Container>
   )

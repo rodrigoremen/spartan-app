@@ -10,6 +10,7 @@ import { EnvelopeClosedIcon, PersonIcon, MobileIcon, TrashIcon, Pencil2Icon } fr
 import { normas } from '@/components/data/Normas';
 import { useForm, Controller } from 'react-hook-form';
 import { useRouter, useParams } from "next/navigation";
+import { toast } from 'sonner';
 
 
 function NewProjectPage() {
@@ -39,27 +40,51 @@ function NewProjectPage() {
     }
   )
   const router = useRouter();
-  const params = useParams();
+  const params = useParams() as { projectid: string }
 
   const [servicios, setServicios] = React.useState<any[]>([])
   const agregarServicio = (servicio: any) => {
     setServicios((prevServicios: any[]) => [...prevServicios, servicio]);
   };
 
+
   const onSubmit = handleSubmit(async (data) => {
     const newData = { ...data, servicios };
-
-    if (!params.projectid) {
-      const resp = await axios.post('/api/projects', newData)
-      if (resp.status === 201) {
-        router.push('/dashboard')
+    try {
+      if (!params.projectid) {
+        const resp = await axios.post('/api/projects', newData)
+        if (resp.status === 201) {
+          router.push('/dashboard')
+          router.refresh();
+          toast.success('Proyecto creado correctamente')
+        }
+        console.log(resp);
+      } else {
+        console.log('editando proyecto')
       }
-      console.log(resp);
-    } else {
-      console.log('editando proyecto')
+    } catch (error) {
+      if ((error as any).response?.status === 400) {
+        toast.error('EL folio ya existe');
+      }
+      if ((error as any).response?.status === 500) {
+        toast.error('Error en el servidor');
+      }
+    }
+  });
+
+  const handleDelete = async (projectid: string) => {
+    console.log(projectid)
+    const resp = await axios.delete(`/api/projects/${projectid}`)
+
+    if (resp.status === 200) {
+      toast.success('Proyecto eliminado correctamente')
     }
 
-  });
+    router.push('/dashboard')
+    router.refresh()
+
+    console.log(resp)
+  }
 
   return (
     <div className='w-fit mx-auto'>
@@ -340,18 +365,20 @@ function NewProjectPage() {
                 )
               }}
             />
-            <Button type='submit' variant='flat' color="warning" className='mx-auto' startContent={<Pencil2Icon/>}>
+            <Button type='submit' variant='flat' color="warning" className='mx-auto' startContent={<Pencil2Icon />}>
               {params.projectid ? 'Editar proyecto' : 'Crear proyecto'}
             </Button>
           </form>
           <div className='flex justify-end my-4'>
-          {
-            params.projectid && (
-              <Button color='danger' variant='flat' className='mx-auto' startContent={<TrashIcon/>}>
-                Eliminar proyecto
-              </Button>
-            )
-          }
+            {
+              params.projectid && (
+                <Button color='danger' variant='flat' className='mx-auto' startContent={<TrashIcon />}
+                  onClick={() => handleDelete(params.projectid)}
+                >
+                  Eliminar proyecto
+                </Button>
+              )
+            }
           </div>
         </Card>
       </Container>

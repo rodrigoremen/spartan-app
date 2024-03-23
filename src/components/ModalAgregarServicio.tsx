@@ -46,6 +46,7 @@ function ModalAgregarServicio({ agregarServicio }: { agregarServicio: any }) {
                                 />
                                 <div className="flex py-2 px-1 gap-x-2">
                                     <Input
+                                        isRequired
                                         type="number"
                                         label="Precio unitario"
                                         placeholder="0.00"
@@ -59,6 +60,7 @@ function ModalAgregarServicio({ agregarServicio }: { agregarServicio: any }) {
                                         }
                                     />
                                     <Input
+                                        isRequired
                                         type="number"
                                         label="Importe"
                                         placeholder="0.00"

@@ -11,7 +11,7 @@ function GlobalContext({ children }: Props) {
     return (
         <SessionProvider>
             {children}
-            <Toaster />
+            <Toaster richColors position="top-right"/>
         </SessionProvider>
     )
 }

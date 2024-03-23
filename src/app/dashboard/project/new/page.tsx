@@ -1,21 +1,22 @@
 'use client'
-import React from 'react'
-import DatePicker from '@/components/DatePicker';
+import React, { useEffect } from 'react'
 import ModalAgregarServicio from '@/components/ModalAgregarServicio';
 import TablaServicios from '@/components/TablaServicios';
 import axios from 'axios';
+import DatePicker from 'react-datepicker';
 import { Input, Textarea, Button, Select, SelectItem } from "@nextui-org/react";
 import { Card, Container, Heading } from '@radix-ui/themes';
-import { EnvelopeClosedIcon, PersonIcon, MobileIcon, TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import { EnvelopeClosedIcon, PersonIcon, MobileIcon, TrashIcon, Pencil2Icon, CalendarIcon } from "@radix-ui/react-icons";
 import { normas } from '@/components/data/Normas';
 import { useForm, Controller } from 'react-hook-form';
 import { useRouter, useParams } from "next/navigation";
 import { toast } from 'sonner';
+import 'react-datepicker/dist/react-datepicker.css';
 
 
 function NewProjectPage() {
 
-  const { control, handleSubmit } = useForm(
+  const { control, handleSubmit, setValue } = useForm(
     {
       defaultValues: {
         revision: '',
@@ -33,9 +34,9 @@ function NewProjectPage() {
         incluye: '',
         formaPago: '',
         servicios: [],
-        fechaEntrega: new Date(),
-        normas: [
-        ]
+        fechaEntrega:
+          new Date(),
+        normas: []
       }
     }
   )
@@ -85,6 +86,32 @@ function NewProjectPage() {
 
     console.log(resp)
   }
+
+  useEffect(() => {
+    if (params.projectid) {
+      axios.get(`/api/projects/${params.projectid}`)
+        .then((resp) => {
+          const project = resp.data
+          setValue('revision', project.revision)
+          setValue('folio', project.folio)
+          setValue('cliente', project.cliente)
+          setValue('proyecto', project.proyecto)
+          setValue('email', project.email)
+          setValue('telefono', project.telefono)
+          setValue('elaborado', project.elaborado)
+          setValue('autorizado', project.autorizado)
+          setValue('atencion', project.atencion)
+          setValue('notas', project.notas)
+          setValue('tiempoEntrega', project.tiempoEntrega)
+          setValue('nota', project.nota)
+          setValue('incluye', project.incluye)
+          setValue('formaPago', project.formaPago)
+          setValue('fechaEntrega', project.fechaEntrega)
+          setValue('servicios', project.servicios)
+          setValue('normas', project.normas)
+        })
+    }
+  }, [])
 
   return (
     <div className='w-fit mx-auto'>
@@ -164,16 +191,17 @@ function NewProjectPage() {
             <Controller
               name='fechaEntrega'
               control={control}
-              render={
-                ({ field }) => {
-                  return (
-                    <DatePicker
-                      {...field}
-
-                    />
-                  )
-                }
-              } />
+              render={({ field }) => (
+                <DatePicker
+                  dateFormat={'dd/MM/yyyy'}
+                  icon={<CalendarIcon/>}
+                  showIcon
+                  selected={field.value}
+                  onChange={(date) => field.onChange(date)}
+                  className="form-input block w-full px-3 py-2 dark:bg-zinc-800 bg-zinc-100  rounded-md text-sm shadow-sm "
+                />
+              )}
+            />
             <div className='flex gap-x-3'>
               <Controller
                 name='email'
@@ -270,8 +298,8 @@ function NewProjectPage() {
             <label className='text-sm text-center'>Información general</label>
             <div className=''>
               <ModalAgregarServicio agregarServicio={agregarServicio} />
+              <TablaServicios servicios={servicios} />
             </div>
-            <TablaServicios servicios={servicios} />
             <hr />
             <Controller
               name='notas'
@@ -365,14 +393,15 @@ function NewProjectPage() {
                 )
               }}
             />
-            <Button type='submit' variant='flat' color="warning" className='mx-auto' startContent={<Pencil2Icon />}>
+            <Button type='submit' variant='flat' color="warning" className='flex' startContent={<Pencil2Icon />}>
               {params.projectid ? 'Editar proyecto' : 'Crear proyecto'}
             </Button>
+
           </form>
           <div className='flex justify-end my-4'>
             {
               params.projectid && (
-                <Button color='danger' variant='flat' className='mx-auto' startContent={<TrashIcon />}
+                <Button color='danger' variant='flat' className='' startContent={<TrashIcon />}
                   onClick={() => handleDelete(params.projectid)}
                 >
                   Eliminar proyecto

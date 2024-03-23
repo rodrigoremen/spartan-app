@@ -2,6 +2,21 @@ import { NextResponse } from 'next/server';
 import prisma from '@/libs/prisma';
 import { Prisma } from '@prisma/client';
 
+export async function GET(
+	req: Request,
+	{ params }: { params: { id: string } }
+) {
+	const project = await prisma.project.findUnique({
+		where: {
+			id: parseInt(params.id),
+		},
+	});
+	if (!project){
+		return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    }
+	return NextResponse.json(project);
+}
+
 export async function DELETE(
 	req: Request,
 	{ params }: { params: { id: string } }

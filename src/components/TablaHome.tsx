@@ -1,152 +1,64 @@
 'use client'
-import React from "react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Input,
-  Chip,
-  Pagination,
-  SortDescriptor,
-  Tooltip
-} from "@nextui-org/react";
-import { users, columns } from '@/components/data/TablaHome';
-import { EyeOpenIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import React, { useState, useMemo } from 'react';
+import { Table, Input, Pagination, Button, TableHeader, TableBody, TableRow, TableCell, TableColumn } from '@nextui-org/react';
+import { users, columns } from './data/TablaHome';
 
-function TablaHome() {
+export default function ProjectsTable() {
+  const [query, setQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-  type User = typeof users[0];
-  
-  const [filterValue, setFilterValue] = React.useState("");
-  const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-  });
-
-  const hasSearchFilter = Boolean(filterValue);
-
-  const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
-
-    if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
-      );
-    }
-
-    return filteredUsers;
-  }, [hasSearchFilter, filterValue]);
-
-  const items = React.useMemo(() => {
-    return filteredItems;
-  }, [filteredItems]);
-
-  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
-    switch (columnKey) {
-      case "name":
-        return (
-          <div>
-            {cellValue}
-          </div>
-        );
-      case "status":
-        return (
-          <Chip className="capitalize" color="warning" size="sm" variant="flat">
-            {cellValue}
-          </Chip>
-        );
-      case "actions":
-        return (
-          <div className="flex justify-center">
-            <Tooltip content="Detalles">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EyeOpenIcon className='w-5 h-5' />
-              </span>
-            </Tooltip>
-          </div>
-        );
-
-      default:
-        return cellValue;
-    }
-  }, []);
-
-  const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-  }, []);
-
-  const onSearchChange = React.useCallback((value?: string) => {
-    if (value) {
-      setFilterValue(value);
-    } else {
-      setFilterValue("");
-    }
-  }, []);
-
-  const onClear = React.useCallback(()=>{
-    setFilterValue("")
-  },[])
-
-  const topContent = React.useMemo(() => {
-    return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <Input
-            isClearable
-            className="w-full sm:max-w-[44%]"
-            placeholder="Buscar por cotización" 
-            startContent={<MagnifyingGlassIcon />}
-            value={filterValue}
-            onClear={() => onClear()}
-            onValueChange={onSearchChange}
-          />
-        </div>
-      </div>
+  const filteredUsers = useMemo(() => {
+    return users.filter(user => 
+      user.name.toLowerCase().includes(query.toLowerCase()) 
     );
-  }, [filterValue, onSearchChange, onRowsPerPageChange, onClear]);
+  }, [query, users]);
 
-  const bottomContent = React.useMemo(() => {
-    return (
-      <div className="py-2 px-2 flex justify-between items-center">
-        <span className="w-[30%] text-small text-default-400">
-        </span>
-        
-      </div>
-    );
-  }
-  , []);
-
+  const paginatedUsers = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredUsers.slice(startIndex, startIndex + itemsPerPage);
+  }, [currentPage, filteredUsers]);
   return (
-    <Table
-      aria-label="Example table with custom cells, pagination and sorting"
-      isHeaderSticky
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      classNames={{
-        wrapper: "max-h-[382px]",
-      }}
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement="outside"
-    >
-      <TableHeader columns={columns}>
-        {(column) => (
-          <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody items={items}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
-
-    </Table>
+    <div>
+      <Input
+        isClearable
+        placeholder='Buscar...'
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+      <Table>
+        <TableHeader>
+          {columns.map(col => (
+            <TableColumn key={col.uid}>{col.name}</TableColumn>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {paginatedUsers.map((user, index) => (
+            <TableRow key={index}>
+              <TableCell>{user.id}</TableCell>
+              <TableCell>{user.name}</TableCell>
+              <TableCell>{user.project}</TableCell>
+              <TableCell>{user.start}</TableCell>
+              <TableCell>{user.end}</TableCell>
+              <TableCell>{user.status}</TableCell>
+              <TableCell>{user.person}</TableCell>
+              <TableCell>
+                <Button  color="primary">
+                  Ver
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      {filteredUsers.length > itemsPerPage && (
+        <Pagination
+          color='warning'
+          total={Math.ceil(filteredUsers.length / itemsPerPage)}
+          initialPage={1}
+          onChange={(page) => setCurrentPage(page)}
+        />
+      )}
+    </div>
   );
 }
-
-export default TablaHome;

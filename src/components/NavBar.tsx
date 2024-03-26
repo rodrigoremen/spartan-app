@@ -72,7 +72,7 @@ function NavBar() {
                         session && (
                             <>
                             <NavbarItem>
-                                <Link href="/inicio" aria-current="page" color="foreground" className='font-bold'>
+                                <Link href="/dashboard/proyectos" aria-current="page" color="foreground" className='font-bold'>
                                     Dashboard
                                 </Link>
                             </NavbarItem>

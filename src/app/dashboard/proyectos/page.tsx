@@ -3,7 +3,7 @@ import { DashboardIcon } from '@radix-ui/react-icons'
 import { Heading } from '@radix-ui/themes'
 import React from 'react'
 
-function InicioPage() {
+function ProyectosPage() {
   return (
     <div className='mx-auto container justify-center mt-10 max-auto w-2/3'>
       <div className='flex gap-4 mb-8'>
@@ -18,4 +18,4 @@ function InicioPage() {
   )
 }
 
-export default InicioPage
+export default ProyectosPage

@@ -48,7 +48,6 @@ function NewProjectPage() {
     setServicios((prevServicios: any[]) => [...prevServicios, servicio]);
   };
 
-
   const onSubmit = handleSubmit(async (data) => {
     const newData = { ...data, servicios };
     try {
@@ -107,11 +106,14 @@ function NewProjectPage() {
           setValue('incluye', project.incluye)
           setValue('formaPago', project.formaPago)
           setValue('fechaEntrega', project.fechaEntrega)
-          setValue('servicios', project.servicios)
-          setValue('normas', project.normas)
+          setServicios(project.servicios || []);
+          setValue('normas', project.normas);
         })
+        .catch((error) => {
+          console.error("Error al cargar el proyecto:", error);
+        });
     }
-  }, [])
+  }, [params.projectid, setValue])
 
   return (
     <div className='w-fit mx-auto'>
@@ -194,7 +196,7 @@ function NewProjectPage() {
               render={({ field }) => (
                 <DatePicker
                   dateFormat={'dd/MM/yyyy'}
-                  icon={<CalendarIcon/>}
+                  icon={<CalendarIcon />}
                   showIcon
                   selected={field.value}
                   onChange={(date) => field.onChange(date)}
@@ -346,25 +348,17 @@ function NewProjectPage() {
                 )
               }}
             />
-            <Controller
-              name='normas'
-              control={control}
-              render={({ field }) => {
-                return (
-                  <Select
-                    {...field}
-                    isRequired
-                    items={normas}
-                    label="Normas de cumplimiento"
-                    selectionMode="multiple"
-                    placeholder="Seleccione las normas de cumplimiento"
-                    className=""
-                  >
-                    {(normas) => <SelectItem key={normas.value}>{normas.label}</SelectItem>}
-                  </Select>
-                )
-              }}
-            />
+
+            <Select
+              items={normas}
+              isRequired
+              selectionMode='multiple'
+              label="Normas de cumplimiento"
+              placeholder="Seleccione las normas de cumplimiento"
+            >
+              {(normas) => <SelectItem key={normas.value}>{normas.label}</SelectItem>}
+            </Select>
+
             <Controller
               name='incluye'
               control={control}

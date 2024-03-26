@@ -10,6 +10,9 @@ export async function GET(
 		where: {
 			id: parseInt(params.id),
 		},
+		include: {
+			servicios: true,
+		}
 	});
 	if (!project){
 		return NextResponse.json({ error: 'Project not found' }, { status: 404 });

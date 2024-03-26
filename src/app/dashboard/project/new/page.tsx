@@ -36,7 +36,7 @@ function NewProjectPage() {
         servicios: [],
         fechaEntrega:
           new Date(),
-        normas: []
+        normas: ''
       }
     }
   )
@@ -60,7 +60,12 @@ function NewProjectPage() {
         }
         console.log(resp);
       } else {
-        console.log('editando proyecto')
+        const resp = await axios.put(`/api/projects/${params.projectid}`, newData)
+        if (resp.status === 200) {
+          router.push('/dashboard')
+          router.refresh();
+          toast.success('Proyecto editado correctamente')
+        }
       }
     } catch (error) {
       if ((error as any).response?.status === 400) {
@@ -348,17 +353,20 @@ function NewProjectPage() {
                 )
               }}
             />
-
-            <Select
-              items={normas}
-              isRequired
-              selectionMode='multiple'
-              label="Normas de cumplimiento"
-              placeholder="Seleccione las normas de cumplimiento"
-            >
-              {(normas) => <SelectItem key={normas.value}>{normas.label}</SelectItem>}
-            </Select>
-
+            <Controller
+              name='normas'
+              control={control}
+              render={({ field }) => {
+                return (
+                  <Input
+                    {...field}
+                    isRequired
+                    type="text"
+                    label="Normas"
+                  />
+                )
+              }}
+            />
             <Controller
               name='incluye'
               control={control}

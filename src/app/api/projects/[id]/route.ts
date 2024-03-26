@@ -12,11 +12,11 @@ export async function GET(
 		},
 		include: {
 			servicios: true,
-		}
+		},
 	});
-	if (!project){
+	if (!project) {
 		return NextResponse.json({ error: 'Project not found' }, { status: 404 });
-    }
+	}
 	return NextResponse.json(project);
 }
 
@@ -47,3 +47,31 @@ export async function DELETE(
 		);
 	}
 }
+
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
+	const data = await request.json();
+	
+	const serviciosData = data.servicios || [];
+	delete data.servicios; // Elimina servicios del objeto data para evitar el error
+  
+	const projectUpdate = await prisma.project.update({
+	  where: {
+		id: parseInt(params.id),
+	  },
+	  data: {
+		...data,
+		servicios: {
+		  deleteMany: [{ projectId: parseInt(params.id) }], // Borra todos los servicios actuales
+		  create: serviciosData.map((servicio: { cantidad: any; descripcion: any; precioUnitario: any; importe: any; })=> ({
+			cantidad: parseFloat(servicio.cantidad),
+			descripcion: servicio.descripcion,
+			precioUnitario: parseFloat(servicio.precioUnitario),
+			importe: parseFloat(servicio.importe),
+		  })),
+		},
+	  },
+	});
+  
+	return NextResponse.json(projectUpdate);
+  }
+  

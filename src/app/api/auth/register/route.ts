@@ -14,6 +14,7 @@ export async function POST(request: Request) {
 			password: data.password,
 			name: data.name,
 			lastName: data.lastname,
+			role: data.role,
 		},
 	});
 

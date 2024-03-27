@@ -1,7 +1,7 @@
 'use client'
 import { Flex, Text } from '@radix-ui/themes'
-import { Input, Button } from "@nextui-org/react";
-import { EnvelopeClosedIcon, LockClosedIcon, PersonIcon, EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons'
+import { Input, Button, Tabs, Tab } from "@nextui-org/react";
+import { EnvelopeClosedIcon, LockClosedIcon, PersonIcon, EyeClosedIcon, EyeOpenIcon, ClipboardIcon, AvatarIcon } from '@radix-ui/react-icons'
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import logo from "../../../public/images/HorizontalOriginal.png";
@@ -9,17 +9,19 @@ import Image from "next/image";
 import React from 'react'
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { set } from 'date-fns';
 
 
 function SignUpForm() {
 
-    const { control, handleSubmit, formState: { errors } } = useForm(
+    const { control, handleSubmit, setValue, formState: { errors } } = useForm(
         {
             defaultValues: {
                 email: '',
                 password: '',
                 name: '',
-                lastname: ''
+                lastname: '',
+                role: ''
             }
         }
     );
@@ -27,12 +29,12 @@ function SignUpForm() {
 
     const onSubmit = handleSubmit(async (data) => {
         const resp = await axios.post('/api/auth/register', data)
-        
+
         if (resp.status === 201) {
             const result = await signIn('credentials', {
                 redirect: false,
                 email: resp.data.email,
-                password: data.password
+                password: data.password,
             });
 
             if (!result?.ok) {
@@ -40,15 +42,22 @@ function SignUpForm() {
                 return;
             }
 
-            router.push('/dashboard');
+            router.push('/dashboard/proyectos');
         }
-        
+
         console.log(data);
-        
+
         console.log(resp)
     });
 
     const [isVisible, setIsVisible] = React.useState(false);
+    const [selectedRole, setSelectedRole] = React.useState('');
+
+    const handleRoleChange = (key: any) => {
+        setSelectedRole(key);
+        setValue('role', key);
+    };
+    console.log(selectedRole)
 
     const toggleVisibility = () => setIsVisible(!isVisible);
     return (
@@ -60,6 +69,45 @@ function SignUpForm() {
                     alt="image login"
                     width={700}
                     className="object-cover justify-center items-center mx-auto"
+                />
+                <Controller
+                    name='role'
+                    control={control}
+                    render={({ field }) => {
+                        return (
+                            <Tabs
+                                {...field}
+                                fullWidth
+                                aria-label="Options"
+                                variant="bordered"
+                                color='warning'
+                                size='md'
+                                selectedKey={selectedRole}
+                                onSelectionChange={handleRoleChange}
+                            >
+                                <Tab
+                                    key="administrativo"
+                                    title={
+                                        <div className="flex items-center space-x-2 text-white">
+                                            <AvatarIcon />
+                                            <span>Administrativo</span>
+                                        </div>
+                                    }
+
+                                />
+                                <Tab
+                                    key="tecnico"
+                                    title={
+                                        <div className="flex items-center space-x-2 text-white">
+                                            <ClipboardIcon />
+                                            <span>Técnico</span>
+                                        </div>
+                                    }
+
+                                />
+                            </Tabs>
+                        )
+                    }}
                 />
                 <Controller
                     name='name'
@@ -206,7 +254,7 @@ function SignUpForm() {
                             {errors.password.message}
                         </Text>
                     )
-                
+
                 }
                 <Button type="submit" color='warning' className='text-white'>
                     Regístrate

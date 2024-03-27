@@ -18,24 +18,18 @@ import LogoSpartan from './icons/Logo';
 import { useSession, signOut } from 'next-auth/react';
 import React from 'react';
 import { ThemeSwitcher } from './ThemeSwitcher';
+import { PersonIcon } from "@radix-ui/react-icons";
 
 
 function NavBar() {
     const { data: session } = useSession();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-    const menuItems = [
-        'Home',
-        'Iniciar Sesión',
-        'Registrar',
-        'Dashboard',
-        'Log Out',
-    ];
-    
+
     return (
         <Navbar
-            className='bg-white-500 dark:bg-zinc-950'
+            className='bg-white-500 dark:bg-black-500'
             isBordered
-            shouldHideOnScroll
+
             isMenuOpen={isMenuOpen}
             onMenuOpenChange={setIsMenuOpen}
         >
@@ -71,18 +65,18 @@ function NavBar() {
                     {
                         session && (
                             <>
-                            <NavbarItem>
-                                <Link href="/dashboard/proyectos" aria-current="page" color="foreground" className='font-bold'>
-                                    Dashboard
-                                </Link>
-                            </NavbarItem>
-                            <NavbarItem>
-                                <Link href="/dashboard" aria-current="page" color="foreground" className='font-bold'>
-                                    Proyectos
-                                </Link>
-                            </NavbarItem>
-                            <NavbarItem>
-                                    <Link href="/reports" color="foreground" className='font-bold'>
+                                <NavbarItem>
+                                    <Link href="/dashboard/proyectos" aria-current="page" color="foreground" className='font-bold'>
+                                        Dashboard
+                                    </Link>
+                                </NavbarItem>
+                                <NavbarItem>
+                                    <Link href="/dashboard" aria-current="page" color="foreground" className='font-bold'>
+                                        Proyectos
+                                    </Link>
+                                </NavbarItem>
+                                <NavbarItem>
+                                    <Link href="/dashboard/reports" color="foreground" className='font-bold'>
                                         Reportes
                                     </Link>
                                 </NavbarItem>
@@ -97,7 +91,7 @@ function NavBar() {
                 </NavbarItem>
                 {
                     session && (
-                        <>           
+                        <>
                             <Dropdown placement="bottom-end">
                                 <DropdownTrigger>
                                     <Avatar
@@ -105,10 +99,10 @@ function NavBar() {
                                         as="button"
                                         className="transition-transform"
                                         color="warning"
-                                        name="Jason Hughes"
+                                        name={session?.user?.name}
                                         size="sm"
-                                        src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                                        
+                                        showFallback
+                                        fallback={<PersonIcon className="animate-pulse w-6 h-6 text-black" />}
                                     />
                                 </DropdownTrigger>
                                 <DropdownMenu aria-label="Profile Actions" variant="flat">
@@ -116,9 +110,9 @@ function NavBar() {
                                         <p className="font-semibold">Hola!</p>
                                         <p className="font-semibold">{session?.user?.name}</p>
                                     </DropdownItem>
-                                    <DropdownItem key="settings">Mi configuración</DropdownItem>
+                                    {/* <DropdownItem key="settings">Mi configuración</DropdownItem> */}
                                     <DropdownItem key="logout" color="danger" onClick={() => signOut()}>
-                                        Log Out
+                                        Cerrar sesión
                                     </DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
@@ -127,18 +121,31 @@ function NavBar() {
                 }
             </NavbarContent>
             <NavbarMenu>
-                {menuItems.map((item, index) => (
-                    <NavbarMenuItem key={`${item}-${index}`}>
-                        <Link
-                            className="w-full"
-                            color={index === menuItems.length - 1 ? 'danger' : 'foreground'}
-                            href="#"
-                            size="lg"
-                        >
-                            {item}
-                        </Link>
-                    </NavbarMenuItem>
-                ))}
+                <NavbarMenu>
+                    {!session ? (
+                        <>
+                            <NavbarMenuItem>
+                                <Link href="/auth/register" color="foreground">Registrar</Link>
+                            </NavbarMenuItem>
+                            <NavbarMenuItem>
+                                <Link href="/auth/login" color="foreground">Inicio de sesión</Link>
+                            </NavbarMenuItem>
+                        </>
+                    ) : (
+                        <>
+                            <NavbarMenuItem>
+                                <Link href="/dashboard/proyectos" color="foreground">Dashboard</Link>
+                            </NavbarMenuItem>
+                            <NavbarMenuItem>
+                                <Link href="/dashboard" color="foreground">Proyectos</Link>
+                            </NavbarMenuItem>
+                            <NavbarMenuItem>
+                                <Link href="/dashboard/reports" color="foreground">Reportes</Link>
+                            </NavbarMenuItem>
+                        </>
+                    )}
+                </NavbarMenu>
+
             </NavbarMenu>
         </Navbar>
     );

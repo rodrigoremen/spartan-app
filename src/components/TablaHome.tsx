@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useMemo } from 'react';
-import { Table, Input, Pagination, Button, TableHeader, TableBody, TableRow, TableCell, TableColumn } from '@nextui-org/react';
+import { EyeOpenIcon } from "@radix-ui/react-icons";
+import { Table, Input, Pagination, Button, TableHeader, TableBody, TableRow, TableCell, TableColumn, Tooltip, Chip } from '@nextui-org/react';
 import { users, columns } from './data/TablaHome';
 
 export default function ProjectsTable() {
@@ -9,8 +10,8 @@ export default function ProjectsTable() {
   const itemsPerPage = 5;
 
   const filteredUsers = useMemo(() => {
-    return users.filter(user => 
-      user.name.toLowerCase().includes(query.toLowerCase()) 
+    return users.filter(user =>
+      user.name.toLowerCase().includes(query.toLowerCase())
     );
   }, [query, users]);
 
@@ -24,6 +25,7 @@ export default function ProjectsTable() {
         isClearable
         placeholder='Buscar...'
         value={query}
+        className='mb-4'
         onChange={(e) => setQuery(e.target.value)}
       />
       <Table>
@@ -40,12 +42,18 @@ export default function ProjectsTable() {
               <TableCell>{user.project}</TableCell>
               <TableCell>{user.start}</TableCell>
               <TableCell>{user.end}</TableCell>
-              <TableCell>{user.status}</TableCell>
+              <TableCell>
+                <Chip className="capitalize" color="warning" size="sm" variant="flat">
+                  {user.status}
+                </Chip>
+              </TableCell>
               <TableCell>{user.person}</TableCell>
               <TableCell>
-                <Button  color="primary">
-                  Ver
-                </Button>
+                <Tooltip content="Ver proyecto">
+                  <span className="text-lg flex justify-center cursor-pointer active:opacity-50">
+                    <EyeOpenIcon />
+                  </span>
+                </Tooltip>
               </TableCell>
             </TableRow>
           ))}

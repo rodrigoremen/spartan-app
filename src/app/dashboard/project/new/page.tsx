@@ -4,10 +4,9 @@ import ModalAgregarServicio from '@/components/ModalAgregarServicio';
 import TablaServicios from '@/components/TablaServicios';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
-import { Input, Textarea, Button, Select, SelectItem } from "@nextui-org/react";
+import { Input, Textarea, Button } from "@nextui-org/react";
 import { Card, Container, Heading } from '@radix-ui/themes';
 import { EnvelopeClosedIcon, PersonIcon, MobileIcon, TrashIcon, Pencil2Icon, CalendarIcon } from "@radix-ui/react-icons";
-import { normas } from '@/components/data/Normas';
 import { useForm, Controller } from 'react-hook-form';
 import { useRouter, useParams } from "next/navigation";
 import { toast } from 'sonner';
@@ -122,7 +121,7 @@ function NewProjectPage() {
 
   return (
     <div className='w-fit mx-auto'>
-      <Container height="100%" className='p-3 mt-8 md:p-0 mb-4'>
+      <Container height="100%" className=' mt-8  mb-4'>
         <Card className=' p-5'>
           <form onSubmit={onSubmit} className='flex flex-col gap-y-4'>
             <Heading>
@@ -194,7 +193,7 @@ function NewProjectPage() {
                 )
               }}
             />
-            <label className='text-sm'>Fecha de entrega estimada</label>
+            <label className='text-sm'>Fecha de inicio</label>
             <Controller
               name='fechaEntrega'
               control={control}

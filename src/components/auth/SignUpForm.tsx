@@ -100,7 +100,7 @@ function SignUpForm() {
                                     title={
                                         <div className="flex items-center space-x-2 text-white">
                                             <ClipboardIcon />
-                                            <span>Técnico</span>
+                                            <span>Operativo</span>
                                         </div>
                                     }
 

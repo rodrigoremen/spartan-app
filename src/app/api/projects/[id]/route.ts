@@ -48,30 +48,54 @@ export async function DELETE(
 	}
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(
+	request: Request,
+	{ params }: { params: { id: string } }
+) {
 	const data = await request.json();
-	
+
 	const serviciosData = data.servicios || [];
 	delete data.servicios; // Elimina servicios del objeto data para evitar el error
-  
+
 	const projectUpdate = await prisma.project.update({
-	  where: {
-		id: parseInt(params.id),
-	  },
-	  data: {
-		...data,
-		servicios: {
-		  deleteMany: [{ projectId: parseInt(params.id) }], // Borra todos los servicios actuales
-		  create: serviciosData.map((servicio: { cantidad: any; descripcion: any; precioUnitario: any; importe: any; })=> ({
-			cantidad: parseFloat(servicio.cantidad),
-			descripcion: servicio.descripcion,
-			precioUnitario: parseFloat(servicio.precioUnitario),
-			importe: parseFloat(servicio.importe),
-		  })),
+		where: {
+			id: parseInt(params.id),
 		},
-	  },
+		data: {
+			revision: parseFloat(data.revision),
+			folio: data.folio,
+			cliente: data.cliente,
+			proyecto: data.proyecto,
+			fechaEntrega: data.fechaEntrega,
+			email: data.email,
+			telefono: data.telefono,
+			elaborado: data.elaborado,
+			autorizado: data.autorizado,
+			atencion: data.atencion,
+			notas: data.notas,
+			tiempoEntrega: data.tiempoEntrega,
+			nota: data.nota,
+			normas: data.normas,
+			incluye: data.incluye,
+			formaPago: data.formaPago,
+			servicios: {
+				deleteMany: [{ projectId: parseInt(params.id) }], // Borra todos los servicios actuales
+				create: serviciosData.map(
+					(servicio: {
+						cantidad: any;
+						descripcion: any;
+						precioUnitario: any;
+						importe: any;
+					}) => ({
+						cantidad: parseFloat(servicio.cantidad),
+						descripcion: servicio.descripcion,
+						precioUnitario: parseFloat(servicio.precioUnitario),
+						importe: parseFloat(servicio.importe),
+					})
+				),
+			},
+		},
 	});
-  
+
 	return NextResponse.json(projectUpdate);
-  }
-  
+}

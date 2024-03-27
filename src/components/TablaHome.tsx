@@ -61,7 +61,9 @@ export default function ProjectsTable() {
       </Table>
       {filteredUsers.length > itemsPerPage && (
         <Pagination
+          className='text-white mt-2'
           color='warning'
+          variant='faded'
           total={Math.ceil(filteredUsers.length / itemsPerPage)}
           initialPage={1}
           onChange={(page) => setCurrentPage(page)}

@@ -9,6 +9,7 @@ declare module "next-auth" {
       name: ReactNode
       /** The user's postal address. */
       id: string
+      role: ReactNode
     }
   }
 }

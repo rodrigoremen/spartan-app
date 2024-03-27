@@ -4,6 +4,7 @@ import ModalAgregarServicio from '@/components/ModalAgregarServicio';
 import TablaServicios from '@/components/TablaServicios';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
+import { useSession } from 'next-auth/react';
 import { Input, Textarea, Button } from "@nextui-org/react";
 import { Card, Container, Heading } from '@radix-ui/themes';
 import { EnvelopeClosedIcon, PersonIcon, MobileIcon, TrashIcon, Pencil2Icon, CalendarIcon } from "@radix-ui/react-icons";
@@ -11,6 +12,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { useRouter, useParams } from "next/navigation";
 import { toast } from 'sonner';
 import 'react-datepicker/dist/react-datepicker.css';
+
 
 
 function NewProjectPage() {
@@ -118,6 +120,8 @@ function NewProjectPage() {
         });
     }
   }, [params.projectid, setValue])
+  const { data: session } = useSession();
+
 
   return (
     <div className='w-fit mx-auto'>
@@ -128,37 +132,77 @@ function NewProjectPage() {
               {params.projectid ? 'Editar proyecto' : 'Nuevo proyecto'}
             </Heading>
             <div className='flex gap-x-3'>
-              <Controller
-                name='revision'
-                control={control}
-                render={({ field }) => {
-                  return (
-                    <Input
-                      isRequired
-                      {...field}
-                      type="number"
-                      label="Revision"
-                      placeholder='0.0'
-                      className=""
-                    />
-                  )
-                }}
-              />
-              <Controller
-                name='folio'
-                control={control}
-                render={({ field }) => {
-                  return (
-                    <Input
-                      {...field}
-                      isRequired
-                      type="text"
-                      label="Folio de cotización"
-                      className=""
-                    />
-                  )
-                }}
-              />
+              {
+                session?.user?.role === 'tecnico' ? (
+                  <Controller
+                    name='revision'
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Input
+                          isDisabled
+                          isRequired
+                          {...field}
+                          type="number"
+                          label="Revision"
+                          placeholder='0.0'
+                          className=""
+                        />
+                      )
+                    }}
+                  />
+                ) : <Controller
+                  name='revision'
+                  control={control}
+                  render={({ field }) => {
+                    return (
+                      <Input
+                        isRequired
+                        {...field}
+                        type="number"
+                        label="Revision"
+                        placeholder='0.0'
+                        className=""
+                      />
+                    )
+                  }}
+                />
+              }
+              {
+                session?.user?.role === 'tecnico' ? (
+                  <Controller
+                    name='folio'
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Input
+                          isDisabled
+                          {...field}
+                          isRequired
+                          type="text"
+                          label="Folio de cotización"
+                          className=""
+                        />
+                      )
+                    }}
+                  />
+                ) :
+                  <Controller
+                    name='folio'
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Input
+                          {...field}
+                          isRequired
+                          type="text"
+                          label="Folio de cotización"
+                          className=""
+                        />
+                      )
+                    }}
+                  />
+              }
             </div>
             <Controller
               name='cliente'

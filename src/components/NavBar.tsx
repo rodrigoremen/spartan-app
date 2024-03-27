@@ -39,10 +39,9 @@ function NavBar() {
                 />
             </NavbarContent>
             <NavbarContent justify="start">
-                <LogoSpartan />
                 <NavbarBrand className="mr-4">
                     <Link href="/" aria-current="page" color="foreground">
-                        <p className="hidden sm:block font-bold text-inherit">SPARTAN</p>
+                        <LogoSpartan />
                     </Link>
                 </NavbarBrand>
                 <NavbarContent className="hidden sm:flex gap-3">

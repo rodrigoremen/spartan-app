@@ -1,12 +1,12 @@
 'use client'
-import { Button } from '@nextui-org/react'
+import { Button, User, Link } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 
 function InicioPage() {
     const router = useRouter()
     return (
         <div className="bg-white dark:bg-black">
-            <div className="relative isolate px-6 pt-14 lg:px-8">
+            <div className="relative isolate px-6 lg:px-8">
                 <div
                     className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
                     aria-hidden="true"
@@ -19,7 +19,7 @@ function InicioPage() {
                         }}
                     />
                 </div>
-                <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+                <div className="mx-auto max-w-2xl py-24 sm:py-24 lg:py-32">
                     <div className="text-center">
                         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
                             Spartan App
@@ -47,7 +47,30 @@ function InicioPage() {
                     />
                 </div>
             </div>
+            <footer className="">
+                <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
+                    <div className="sm:flex sm:items-center sm:justify-between">
+                        <div className="flex justify-center sm:justify-start">
+                            <User
+                                name="Rodrigo Dorantes"
+                                description={(
+                                    <Link href="https://github.com/rodrigoremen" size="sm" isExternal>
+                                        @rodrigoremen
+                                    </Link>
+                                )}
+                                avatarProps={{
+                                    src: "https://avatars.githubusercontent.com/u/106606020?v=4"
+                                }}
+                            />
+                        </div>
+                        <p className="mt-4 text-center text-sm text-gray-500 lg:mt-0 lg:text-right">
+                            Copyright &copy; 2022. All rights reserved.
+                        </p>
+                    </div>
+                </div>
+            </footer>
         </div>
+
     )
 }
 

@@ -70,7 +70,6 @@ function InicioPage() {
                 </div>
             </footer>
         </div>
-
     )
 }
 

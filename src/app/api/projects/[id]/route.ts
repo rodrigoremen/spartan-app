@@ -12,6 +12,8 @@ export async function GET(
 		},
 		include: {
 			servicios: true,
+			acuerdos: true,
+			conceptos: true,
 		},
 	});
 	if (!project) {
@@ -55,7 +57,10 @@ export async function PUT(
 	const data = await request.json();
 
 	const serviciosData = data.servicios || [];
-	delete data.servicios; // Elimina servicios del objeto data para evitar el error
+	delete data.servicios; 
+
+	const acuerdosData = data.acuerdos || [];
+	delete data.acuerdos;
 
 	const projectUpdate = await prisma.project.update({
 		where: {
@@ -78,6 +83,7 @@ export async function PUT(
 			normas: data.normas,
 			incluye: data.incluye,
 			formaPago: data.formaPago,
+			avanceFinanciero: parseInt(data.avanceFinanciero),
 			servicios: {
 				deleteMany: [{ projectId: parseInt(params.id) }], // Borra todos los servicios actuales
 				create: serviciosData.map(
@@ -91,6 +97,42 @@ export async function PUT(
 						descripcion: servicio.descripcion,
 						precioUnitario: parseFloat(servicio.precioUnitario),
 						importe: parseFloat(servicio.importe),
+					})
+				),
+			},
+			acuerdos: {
+				deleteMany: [{ projectId: parseInt(params.id) }], // Borra todos los acuerdos actuales
+				create: acuerdosData.map(
+					(acuerdo: {
+						objetivo: any;
+						estado: any;
+						fechaEntrega: any;
+						responsable: any;
+						observaciones: any;
+					}) => ({
+						objetivo: acuerdo.objetivo,
+						estado: acuerdo.estado,
+						fechaEntrega: acuerdo.fechaEntrega,
+						responsable: acuerdo.responsable,
+						observaciones: acuerdo.observaciones,
+					})
+				),
+			},
+			conceptos: {
+				deleteMany: [{ projectId: parseInt(params.id) }], // Borra todos los conceptos actuales
+				create: data.conceptos.map(
+					(concepto: {
+						concepto: any;
+						status: any;
+						tecnico: any;
+						avance: any;
+						fechaEstimada: any;
+					}) => ({
+						concepto: concepto.concepto,
+						status: concepto.status,
+						tecnico: concepto.tecnico,
+						avance: parseInt(concepto.avance),
+						fechaEstimada: concepto.fechaEstimada,
 					})
 				),
 			},

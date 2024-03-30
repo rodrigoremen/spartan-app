@@ -2,9 +2,9 @@ import React from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 
 
-function TablaServicios({ servicios }: { servicios: any[]}) {
-    return (
-        <Table aria-label="Example empty table">
+function TablaServicios({ servicios }: { servicios: any[] }) {
+  return (
+    <Table aria-label="Example empty table">
       <TableHeader>
         <TableColumn>Cantidad</TableColumn>
         <TableColumn>Descripción</TableColumn>
@@ -22,7 +22,7 @@ function TablaServicios({ servicios }: { servicios: any[]}) {
         ))}
       </TableBody>
     </Table>
-    );
+  );
 }
 
 

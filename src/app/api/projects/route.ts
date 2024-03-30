@@ -31,6 +31,7 @@ export async function POST(request: Request) {
 				normas: data.normas,
 				incluye: data.incluye,
 				formaPago: data.formaPago,
+				avanceFinanciero: parseInt(data.avanceFinanciero),
 				user: {
 					connect: {
 						id: parseInt(session?.user.id),
@@ -48,6 +49,40 @@ export async function POST(request: Request) {
 							descripcion: servicio.descripcion,
 							precioUnitario: parseFloat(servicio.precioUnitario),
 							importe: parseFloat(servicio.importe),
+						})
+					),
+				},
+				acuerdos: {
+					create: data.acuerdos.map(
+						(acuerdo: {
+							objetivo: string;
+							estado: string;
+							fechaEntrega: any;
+							responsable: string;
+							observaciones: string;
+						}) => ({
+							objetivo: acuerdo.objetivo,
+							estado: acuerdo.estado,
+							fechaEntrega: acuerdo.fechaEntrega,
+							responsable: acuerdo.responsable,
+							observaciones: acuerdo.observaciones,
+						})
+					),
+				},
+				conceptos: {
+					create: data.conceptos.map(
+						(concepto: {
+							concepto: string;
+							status: string;
+							tecnico: string;
+							avance: any;
+							fechaEstimada: string;
+						}) => ({
+							concepto: concepto.concepto,
+							status: concepto.status,
+							tecnico: concepto.tecnico,
+							avance: parseInt(concepto.avance),
+							fechaEstimada: concepto.fechaEstimada,
 						})
 					),
 				},

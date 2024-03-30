@@ -15,7 +15,7 @@ function ModalAgregarServicio({ agregarServicio }: { agregarServicio: any }) {
 
     return (
         <>
-            <Button onPress={onOpen} color="warning" variant="flat">Agregar servicio</Button>
+            <Button className="mb-3" onPress={onOpen} color="warning" variant="flat">Agregar servicio</Button>
             <Modal
                 backdrop={"blur"}
                 isOpen={isOpen}
@@ -50,7 +50,6 @@ function ModalAgregarServicio({ agregarServicio }: { agregarServicio: any }) {
                                         type="number"
                                         label="Precio unitario"
                                         placeholder="0.00"
-                                        labelPlacement="outside"
                                         value={precioUnitario}
                                         onChange={(e) => setPrecioUnitario(e.target.value)}
                                         startContent={
@@ -64,7 +63,6 @@ function ModalAgregarServicio({ agregarServicio }: { agregarServicio: any }) {
                                         type="number"
                                         label="Importe"
                                         placeholder="0.00"
-                                        labelPlacement="outside"
                                         value={importe}
                                         onChange={(e) => setImporte(e.target.value)}
                                         startContent={

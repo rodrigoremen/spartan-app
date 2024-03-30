@@ -23,29 +23,32 @@ model User {
 }
 
 model Project {
-  id            Int       @id @default(autoincrement())
-  revision      Float
-  folio         String    @unique
-  cliente       String
-  proyecto      String
-  fechaEntrega  DateTime
-  email         String
-  telefono      String
-  elaborado     String
-  autorizado    String
-  atencion      String
-  estado        Int?      @default(0)
-  notas         String
-  tiempoEntrega String
-  nota          String
-  normas        String
-  incluye       String
-  formaPago     String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  userId        Int
-  user          User      @relation(fields: [userId], references: [id])
-  servicios     Service[]
+  id               Int        @id @default(autoincrement())
+  revision         Float
+  folio            String     @unique
+  cliente          String
+  proyecto         String
+  fechaEntrega     DateTime
+  email            String
+  telefono         String
+  elaborado        String
+  autorizado       String
+  atencion         String
+  estado           Int?       @default(0)
+  notas            String
+  tiempoEntrega    String
+  nota             String
+  normas           String
+  incluye          String
+  formaPago        String
+  avanceFinanciero Int        @default(0)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  userId           Int
+  user             User       @relation(fields: [userId], references: [id])
+  servicios        Service[]
+  acuerdos         Acuerdos[]
+  conceptos        Conceptos[]
 }
 
 model Service {
@@ -56,4 +59,30 @@ model Service {
   importe        Float
   projectId      Int
   project        Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Acuerdos {
+  id            Int      @id @default(autoincrement())
+  objetivo      String
+  estado        String
+  fechaEntrega  String
+  responsable   String
+  observaciones String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  projectId     Int
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Conceptos {
+  id            Int      @id @default(autoincrement())
+  concepto      String
+  status        String
+  tecnico       String
+  avance        Int
+  fechaEstimada  String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  projectId     Int
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }

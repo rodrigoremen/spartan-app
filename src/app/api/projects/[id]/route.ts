@@ -59,7 +59,7 @@ export async function PUT(
 	const data = await request.json();
 
 	const serviciosData = data.servicios || [];
-	delete data.servicios; 
+	delete data.servicios;
 
 	const acuerdosData = data.acuerdos || [];
 	delete data.acuerdos;
@@ -144,10 +144,7 @@ export async function PUT(
 			actividades: {
 				deleteMany: [{ projectId: parseInt(params.id) }], // Borra todas las actividades actuales
 				create: data.actividades.map(
-					(actividad: {
-						actividad: any;
-						tiempoEntrega: any;
-					}) => ({
+					(actividad: { actividad: any; tiempoEntrega: any }) => ({
 						actividad: actividad.actividad,
 						tiempoEntrega: actividad.tiempoEntrega,
 					})
@@ -156,10 +153,7 @@ export async function PUT(
 			problemas: {
 				deleteMany: [{ projectId: parseInt(params.id) }], // Borra todos los problemas actuales
 				create: data.problemas.map(
-					(problema: {
-						problemas: string;
-						respuesta: string;
-					}) => ({
+					(problema: { problemas: string; respuesta: string }) => ({
 						problemas: problema.problemas,
 						respuesta: problema.respuesta,
 					})

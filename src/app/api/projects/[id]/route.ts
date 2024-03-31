@@ -15,6 +15,7 @@ export async function GET(
 			acuerdos: true,
 			conceptos: true,
 			actividades: true,
+			problemas: true,
 		},
 	});
 	if (!project) {
@@ -149,6 +150,18 @@ export async function PUT(
 					}) => ({
 						actividad: actividad.actividad,
 						tiempoEntrega: actividad.tiempoEntrega,
+					})
+				),
+			},
+			problemas: {
+				deleteMany: [{ projectId: parseInt(params.id) }], // Borra todos los problemas actuales
+				create: data.problemas.map(
+					(problema: {
+						problemas: string;
+						respuesta: string;
+					}) => ({
+						problemas: problema.problemas,
+						respuesta: problema.respuesta,
 					})
 				),
 			},

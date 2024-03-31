@@ -53,6 +53,7 @@ model Project {
   acuerdos          Acuerdos[]
   conceptos         Conceptos[]
   actividades       Actividad[]
+  problemas         Problemas[]
 }
 
 model Service {
@@ -99,4 +100,14 @@ model Actividad {
   updatedAt     DateTime @updatedAt
   projectId     Int
   project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Problemas {
+  id        Int      @id @default(autoincrement())
+  problemas String
+  respuesta String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  projectId Int
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }

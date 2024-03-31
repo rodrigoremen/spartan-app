@@ -18,6 +18,8 @@ import ModalAgregarConcepto from '@/components/projects/ModalAgregarConcepto';
 import TablaConceptos from '@/components/projects/TablaConceptos';
 import ModalAgregarActividades from '@/components/projects/ModalAgregarActividades';
 import TablaActividades from '@/components/projects/TablaActividades';
+import ModalAgregarProblema from '@/components/projects/ModalAgregarProblema';
+import TablaProblema from '@/components/projects/TablaProblema';
 
 
 
@@ -50,7 +52,8 @@ function NewProjectPage() {
         avanceProduccion: '',
         avanceInstalacion: '',
         situacionGeneral: '',
-        actividades: []
+        actividades: [],
+        problemas: [],
         //añadir esto a la base de datos
       }
     }
@@ -78,8 +81,13 @@ function NewProjectPage() {
     setActividades((prevActividades: any[]) => [...prevActividades, actividad]);
   };
 
+  const [problemas, setProblemas] = React.useState<any[]>([])
+  const agregarProblema = (problema: any) => {
+    setProblemas((prevProblemas: any[]) => [...prevProblemas, problema]);
+  };
+
   const onSubmit = handleSubmit(async (data) => {
-    const newData = { ...data, servicios, acuerdos, conceptos, actividades};
+    const newData = { ...data, servicios, acuerdos, conceptos, actividades, problemas};
     try {
       if (!params.projectid) {
         const resp = await axios.post('/api/projects', newData)
@@ -149,6 +157,7 @@ function NewProjectPage() {
           setValue('situacionGeneral', project.situacionGeneral);
           setConceptos(project.conceptos || []);
           setActividades(project.actividades || []);
+          setProblemas(project.problemas || []);
           console.log(project)
         })
         .catch((error) => {
@@ -905,6 +914,10 @@ function NewProjectPage() {
                   <div>
                     <ModalAgregarActividades agregarActividad={agregarActividad} />
                     <TablaActividades actividades={actividades} />
+                  </div>
+                  <div>
+                    <ModalAgregarProblema agregarProblema={agregarProblema} />
+                    <TablaProblema problemas={problemas} />
                   </div>
                 </>
               ) : null

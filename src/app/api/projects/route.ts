@@ -100,6 +100,17 @@ export async function POST(request: Request) {
 						})
 					),
 				},
+				problemas: {
+					create: data.problemas.map(
+						(problema: {
+							problemas: string;
+							respuesta: string;
+						}) => ({
+							problemas: problema.problemas,
+							respuesta: problema.respuesta,
+						})
+					),
+				},
 			},
 		});
 		return NextResponse.json(newProject, { status: 201 });

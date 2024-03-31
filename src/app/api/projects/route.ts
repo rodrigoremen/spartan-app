@@ -32,6 +32,9 @@ export async function POST(request: Request) {
 				incluye: data.incluye,
 				formaPago: data.formaPago,
 				avanceFinanciero: parseInt(data.avanceFinanciero),
+				avanceProduccion: parseInt(data.avanceProduccion),
+				avanceInstalacion: parseInt(data.avanceInstalacion),
+				situacionGeneral: data.situacionGeneral,
 				user: {
 					connect: {
 						id: parseInt(session?.user.id),
@@ -86,15 +89,32 @@ export async function POST(request: Request) {
 						})
 					),
 				},
+				actividades: {
+					create: data.actividades.map(
+						(actividad: {
+							actividad: string;
+							fechaEstimada: string;
+						}) => ({
+							actividad: actividad.actividad,
+							fechaEstimada: actividad.fechaEstimada,
+						})
+					),
+				},
 			},
 		});
 		return NextResponse.json(newProject, { status: 201 });
 	} catch (error) {
 		if (error instanceof Prisma.PrismaClientKnownRequestError) {
 			if (error.code === 'P2002') {
-				return NextResponse.json({ error: 'El folio ya existe' }, { status: 400 });
+				return NextResponse.json(
+					{ error: 'El folio ya existe' },
+					{ status: 400 }
+				);
 			}
 		}
-		return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+		return NextResponse.json(
+			{ error: 'Internal server error' },
+			{ status: 500 }
+		);
 	}
 }

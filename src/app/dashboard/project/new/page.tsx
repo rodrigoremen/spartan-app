@@ -16,6 +16,8 @@ import ModalAgregarAcuerdos from '@/components/projects/ModalAgregarAcuerdos';
 import TablaAcuerdos from '@/components/projects/TablaAcuerdos';
 import ModalAgregarConcepto from '@/components/projects/ModalAgregarConcepto';
 import TablaConceptos from '@/components/projects/TablaConceptos';
+import ModalAgregarActividades from '@/components/projects/ModalAgregarActividades';
+import TablaActividades from '@/components/projects/TablaActividades';
 
 
 
@@ -45,10 +47,11 @@ function NewProjectPage() {
         acuerdos: [],
         avanceFinanciero: '',
         conceptos: [],
-        //añadir esto a la base de datos
         avanceProduccion: '',
         avanceInstalacion: '',
         situacionGeneral: '',
+        actividades: []
+        //añadir esto a la base de datos
       }
     }
   )
@@ -70,8 +73,13 @@ function NewProjectPage() {
     setConceptos((prevConceptos: any[]) => [...prevConceptos, concepto]);
   };
 
+  const [actividades, setActividades] = React.useState<any[]>([])
+  const agregarActividad = (actividad: any) => {
+    setActividades((prevActividades: any[]) => [...prevActividades, actividad]);
+  };
+
   const onSubmit = handleSubmit(async (data) => {
-    const newData = { ...data, servicios ,acuerdos, conceptos};
+    const newData = { ...data, servicios, acuerdos, conceptos, actividades};
     try {
       if (!params.projectid) {
         const resp = await axios.post('/api/projects', newData)
@@ -136,7 +144,11 @@ function NewProjectPage() {
           setValue('normas', project.normas);
           setValue('avanceFinanciero', project.avanceFinanciero);
           setAcuerdos(project.acuerdos || []);
+          setValue('avanceProduccion', project.avanceProduccion);
+          setValue('avanceInstalacion', project.avanceInstalacion);
+          setValue('situacionGeneral', project.situacionGeneral);
           setConceptos(project.conceptos || []);
+          setActividades(project.actividades || []);
           console.log(project)
         })
         .catch((error) => {
@@ -733,83 +745,83 @@ function NewProjectPage() {
                 />
             }
             <div className='flex gap-x-3'>
-            {
-              session?.user?.role === 'tecnico' ? (
-                <Controller
-                  name='formaPago'
-                  control={control}
-                  render={({ field }) => {
-                    return (
-                      <Input
-                        {...field}
-                        isDisabled
-                        isRequired
-                        type="text"
-                        label="Forma de pago"
-                      />
-                    )
-                  }}
-                />
-              ) :
-                <Controller
-                  name='formaPago'
-                  control={control}
-                  render={({ field }) => {
-                    return (
-                      <Input
-                        {...field}
-                        isRequired
-                        type="text"
-                        label="Forma de pago"
-                        
-                      />
-                    )
-                  }}
-                />
-            }
-            {
-              session?.user?.role === 'tecnico' ? (
-                <Controller
-                  name='avanceFinanciero'
-                  control={control}
-                  render={({ field }) => {
-                    return (
-                      <Input
-                        {...field}
-                        isDisabled
-                        isRequired
-                        type="number"
-                        label="Avance financiero"
-                        startContent={
-                          <div className="pointer-events-none flex items-center">
-                            <span className="text-default-400 text-small">%</span>
-                          </div>
-                        }
-                      />
-                    )
-                  }}
-                />
-              ) :
-                <Controller
-                  name='avanceFinanciero'
-                  control={control}
-                  render={({ field }) => {
-                    return (
-                      <Input
-                        {...field}
-                        isRequired
-                        type="number"
-                        label="Avance financiero"
-                        startContent={
-                          <div className="pointer-events-none flex items-center">
-                            <span className="text-default-400 text-small">%</span>
-                          </div>
-                        }
-                      />
-                    )
-                  }}
-                />
-            }
+              {
+                session?.user?.role === 'tecnico' ? (
+                  <Controller
+                    name='formaPago'
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Input
+                          {...field}
+                          isDisabled
+                          isRequired
+                          type="text"
+                          label="Forma de pago"
+                        />
+                      )
+                    }}
+                  />
+                ) :
+                  <Controller
+                    name='formaPago'
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Input
+                          {...field}
+                          isRequired
+                          type="text"
+                          label="Forma de pago"
+
+                        />
+                      )
+                    }}
+                  />
+              }
+              {
+                session?.user?.role === 'tecnico' ? (
+                  <Controller
+                    name='avanceFinanciero'
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Input
+                          {...field}
+                          isDisabled
+                          isRequired
+                          type="number"
+                          label="Avance financiero"
+                          startContent={
+                            <div className="pointer-events-none flex items-center">
+                              <span className="text-default-400 text-small">%</span>
+                            </div>
+                          }
+                        />
+                      )
+                    }}
+                  />
+                ) :
+                  <Controller
+                    name='avanceFinanciero'
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Input
+                          {...field}
+                          isRequired
+                          type="number"
+                          label="Avance financiero"
+                          startContent={
+                            <div className="pointer-events-none flex items-center">
+                              <span className="text-default-400 text-small">%</span>
+                            </div>
+                          }
+                        />
+                      )
+                    }}
+                  />
+              }
             </div>
             <hr />
             <div>
@@ -828,60 +840,46 @@ function NewProjectPage() {
                 <>
                   <hr />
                   <label className='text-sm text-center'>Avances del proyecto</label>
-                </>
-              ) : null
-            }
-            <div className='flex gap-x-3'>
-              {
-                session?.user?.role === 'tecnico' ? (
-                  <Controller
-                    name='avanceProduccion'
-                    control={control}
-                    render={({ field }) => {
-                      return (
-                        <Input
-                          {...field}
-                          isRequired
-                          type="number"
-                          label="Avance de producción"
-                          startContent={
-                            <div className="pointer-events-none flex items-center">
-                              <span className="text-default-400 text-small">%</span>
-                            </div>
-                          }
-                        />
-                      )
-                    }}
-                  />
-                ) : null
-
-              }
-              {
-                session?.user?.role === 'tecnico' ? (
-                  <Controller
-                    name='avanceInstalacion'
-                    control={control}
-                    render={({ field }) => {
-                      return (
-                        <Input
-                          {...field}
-                          isRequired
-                          type="number"
-                          label="Avance de instalación"
-                          startContent={
-                            <div className="pointer-events-none flex items-center">
-                              <span className="text-default-400 text-small">%</span>
-                            </div>
-                          }
-                        />
-                      )
-                    }}
-                  />
-                ) : null
-              }
-            </div>
-            {
-                session?.user?.role === 'tecnico' ? (
+                  <div className='flex gap-x-3'>
+                    <Controller
+                      name='avanceProduccion'
+                      control={control}
+                      render={({ field }) => {
+                        return (
+                          <Input
+                            {...field}
+                            isRequired
+                            type="number"
+                            label="Avance de producción"
+                            startContent={
+                              <div className="pointer-events-none flex items-center">
+                                <span className="text-default-400 text-small">%</span>
+                              </div>
+                            }
+                          />
+                        )
+                      }}
+                    />
+                    <Controller
+                      name='avanceInstalacion'
+                      control={control}
+                      render={({ field }) => {
+                        return (
+                          <Input
+                            {...field}
+                            isRequired
+                            type="number"
+                            label="Avance de instalación"
+                            startContent={
+                              <div className="pointer-events-none flex items-center">
+                                <span className="text-default-400 text-small">%</span>
+                              </div>
+                            }
+                          />
+                        )
+                      }}
+                    />
+                  </div>
                   <Controller
                     name='situacionGeneral'
                     control={control}
@@ -896,26 +894,21 @@ function NewProjectPage() {
                       )
                     }}
                   />
-                ) : null
-              }
-            {
-              session?.user?.role === 'tecnico' ? (
-                <>
                   <hr />
                   <label className='text-sm text-center'>Estatus de conceptos</label>
+                  <div>
+                    <ModalAgregarConcepto agregarConcepto={agregarConcepto} />
+                    <TablaConceptos conceptos={conceptos} />
+                  </div>
+                  <hr />
+                  <label className='text-sm text-center'>Actividades relevantes del periodo</label>
+                  <div>
+                    <ModalAgregarActividades agregarActividad={agregarActividad} />
+                    <TablaActividades actividades={actividades} />
+                  </div>
                 </>
               ) : null
             }
-            <div>
-            {
-                session?.user?.role === 'tecnico' ? (
-                  <>
-                  <ModalAgregarConcepto agregarConcepto={agregarConcepto} />
-                  <TablaConceptos conceptos={conceptos} />
-                  </>
-                ) : null    
-              }
-            </div>
             <Button type='submit' variant='flat' color="warning" className='flex' startContent={<Pencil2Icon />}>
               {params.projectid ? 'Actualizar proyecto' : 'Crear proyecto'}
             </Button>

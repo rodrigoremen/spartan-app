@@ -14,6 +14,7 @@ export async function GET(
 			servicios: true,
 			acuerdos: true,
 			conceptos: true,
+			actividades: true,
 		},
 	});
 	if (!project) {
@@ -84,6 +85,9 @@ export async function PUT(
 			incluye: data.incluye,
 			formaPago: data.formaPago,
 			avanceFinanciero: parseInt(data.avanceFinanciero),
+			avanceProduccion: parseInt(data.avanceProduccion),
+			avanceInstalacion: parseInt(data.avanceInstalacion),
+			situacionGeneral: data.situacionGeneral,
 			servicios: {
 				deleteMany: [{ projectId: parseInt(params.id) }], // Borra todos los servicios actuales
 				create: serviciosData.map(
@@ -133,6 +137,18 @@ export async function PUT(
 						tecnico: concepto.tecnico,
 						avance: parseInt(concepto.avance),
 						fechaEstimada: concepto.fechaEstimada,
+					})
+				),
+			},
+			actividades: {
+				deleteMany: [{ projectId: parseInt(params.id) }], // Borra todas las actividades actuales
+				create: data.actividades.map(
+					(actividad: {
+						actividad: any;
+						tiempoEntrega: any;
+					}) => ({
+						actividad: actividad.actividad,
+						tiempoEntrega: actividad.tiempoEntrega,
 					})
 				),
 			},

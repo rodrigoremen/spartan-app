@@ -1,5 +1,5 @@
 'use client'
-import { Card, CardBody, CardFooter, Tooltip } from '@nextui-org/react'
+import { Button, Card, CardBody, CardFooter, Tooltip } from '@nextui-org/react'
 import { Project } from '@prisma/client'
 import React from 'react'
 import { useRouter } from "next/navigation";
@@ -20,8 +20,9 @@ function ReportsCard({ project }: Props) {
             <CardFooter className='flex justify-between'>
                 <p className='text-md text-slate-600'>{project.folio}</p>
                 <Tooltip content="Ver reporte fotográfico">
+                <Button isIconOnly variant="light" onPress={() => router.push(`/dashboard/reports/${project.id}`)} className="text-lg flex justify-center cursor-pointer active:opacity-50">
                     <CameraIcon className='w-6 h-6 text-slate-600' />
-
+                </Button>
                 </Tooltip>
             </CardFooter>
 

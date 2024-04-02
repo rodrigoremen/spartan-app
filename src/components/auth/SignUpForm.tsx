@@ -88,7 +88,7 @@ function SignUpForm() {
                                 <Tab
                                     key="administrativo"
                                     title={
-                                        <div className="flex items-center space-x-2 text-white">
+                                        <div className="flex items-center space-x-2 dark:text-white ">
                                             <AvatarIcon />
                                             <span>Administrativo</span>
                                         </div>
@@ -98,7 +98,7 @@ function SignUpForm() {
                                 <Tab
                                     key="tecnico"
                                     title={
-                                        <div className="flex items-center space-x-2 text-white">
+                                        <div className="flex items-center space-x-2 dark:text-white ">
                                             <ClipboardIcon />
                                             <span>Operativo</span>
                                         </div>

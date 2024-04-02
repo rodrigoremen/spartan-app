@@ -87,7 +87,7 @@ function NewProjectPage() {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    const newData = { ...data, servicios, acuerdos, conceptos, actividades, problemas};
+    const newData = { ...data, servicios, acuerdos, conceptos, actividades, problemas };
     try {
       if (!params.projectid) {
         const resp = await axios.post('/api/projects', newData)
@@ -189,7 +189,7 @@ function NewProjectPage() {
                     render={({ field }) => {
                       return (
                         <Input
-                          isDisabled
+                          isReadOnly
                           isRequired
                           {...field}
                           type="number"
@@ -225,7 +225,7 @@ function NewProjectPage() {
                     render={({ field }) => {
                       return (
                         <Input
-                          isDisabled
+                          isReadOnly
                           {...field}
                           isRequired
                           type="text"
@@ -261,7 +261,7 @@ function NewProjectPage() {
                   render={({ field }) => {
                     return (
                       <Input
-                        isDisabled
+                        isReadOnly
                         {...field}
                         isRequired
                         type="text"
@@ -302,7 +302,7 @@ function NewProjectPage() {
                   render={({ field }) => {
                     return (
                       <Input
-                        isDisabled
+                        isReadOnly
                         {...field}
                         isRequired
                         type="text"
@@ -373,7 +373,7 @@ function NewProjectPage() {
                       return (
                         <Input
                           {...field}
-                          isDisabled
+                          isReadOnly
                           type="email"
                           label="Email"
                           placeholder="you@example.com"
@@ -412,7 +412,7 @@ function NewProjectPage() {
                       return (
                         <Input
                           {...field}
-                          isDisabled
+                          isReadOnly
                           type="number"
                           label="Teléfono de contacto"
                           placeholder="7774429079"
@@ -454,7 +454,7 @@ function NewProjectPage() {
                       return (
                         <Input
                           {...field}
-                          isDisabled
+                          isReadOnly
                           isRequired
                           type="text"
                           label="Elaborado por"
@@ -495,7 +495,7 @@ function NewProjectPage() {
                       return (
                         <Input
                           {...field}
-                          isDisabled
+                          isReadOnly
                           isRequired
                           type="text"
                           label="Autorizado por"
@@ -536,7 +536,7 @@ function NewProjectPage() {
                       return (
                         <Input
                           {...field}
-                          isDisabled
+                          isReadOnly
                           isRequired
                           type="text"
                           label="Atención de"
@@ -570,8 +570,11 @@ function NewProjectPage() {
               }
 
             </div>
-            <hr />
-            <label className='text-sm text-center'>Información general</label>
+            <span className="flex items-center">
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+              <span className="shrink-0 px-6">Información general</span>
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+            </span>
             <div className=''>
               {
                 session?.user?.role === 'tecnico' ? (
@@ -583,7 +586,6 @@ function NewProjectPage() {
               }
               <TablaServicios servicios={servicios} />
             </div>
-            <hr />
             {
               session?.user?.role === 'tecnico' ? (
                 <Controller
@@ -593,7 +595,7 @@ function NewProjectPage() {
                     return (
                       <Textarea
                         {...field}
-                        isDisabled
+                        isReadOnly
                         isRequired
                         label="Notas"
                         placeholder="Ingresa una descripción del proyecto"
@@ -619,8 +621,11 @@ function NewProjectPage() {
                   }}
                 />
             }
-            <hr />
-            <label className='text-sm text-center'> Estas propuestas incluyen las condiciones que se indican a continuación</label>
+            <span className="flex items-center">
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+              <span className="shrink-0 px-6">Estas propuestas incluyen las condiciones que se indican a continuación</span>
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+            </span>
             {
               session?.user?.role === 'tecnico' ? (
                 <Controller
@@ -630,7 +635,7 @@ function NewProjectPage() {
                     return (
                       <Input
                         {...field}
-                        isDisabled
+                        isReadOnly
                         isRequired
                         type="text"
                         label="Tiempo de entrega"
@@ -663,7 +668,7 @@ function NewProjectPage() {
                     return (
                       <Textarea
                         {...field}
-                        isDisabled
+                        isReadOnly
                         isRequired
                         type="text"
                         label="Nota"
@@ -696,7 +701,7 @@ function NewProjectPage() {
                     return (
                       <Input
                         {...field}
-                        isDisabled
+                        isReadOnly
                         isRequired
                         type="text"
                         label="Normas"
@@ -729,7 +734,7 @@ function NewProjectPage() {
                     return (
                       <Input
                         {...field}
-                        isDisabled
+                        isReadOnly
                         isRequired
                         type="text"
                         label="No incluye"
@@ -763,7 +768,7 @@ function NewProjectPage() {
                       return (
                         <Input
                           {...field}
-                          isDisabled
+                          isReadOnly
                           isRequired
                           type="text"
                           label="Forma de pago"
@@ -797,7 +802,7 @@ function NewProjectPage() {
                       return (
                         <Input
                           {...field}
-                          isDisabled
+                          isReadOnly
                           isRequired
                           type="number"
                           label="Avance financiero"
@@ -832,7 +837,11 @@ function NewProjectPage() {
                   />
               }
             </div>
-            <hr />
+            <span className="flex items-center">
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+              <span className="shrink-0 px-6">Acuerdos  anteriores</span>
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+            </span>
             <div>
               {
                 session?.user?.role === 'tecnico' ? (
@@ -847,8 +856,11 @@ function NewProjectPage() {
             {
               session?.user?.role === 'tecnico' ? (
                 <>
-                  <hr />
-                  <label className='text-sm text-center'>Avances del proyecto</label>
+                  <span className="flex items-center">
+                    <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                    <span className="shrink-0 px-6">Avances del proyecto</span>
+                    <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                  </span>
                   <div className='flex gap-x-3'>
                     <Controller
                       name='avanceProduccion'
@@ -903,18 +915,29 @@ function NewProjectPage() {
                       )
                     }}
                   />
-                  <hr />
-                  <label className='text-sm text-center'>Estatus de conceptos</label>
+                  <span className="flex items-center">
+                    <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                    <span className="shrink-0 px-6">Estatus de conceptos</span>
+                    <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                  </span>
                   <div>
                     <ModalAgregarConcepto agregarConcepto={agregarConcepto} />
                     <TablaConceptos conceptos={conceptos} />
                   </div>
-                  <hr />
-                  <label className='text-sm text-center'>Actividades relevantes del periodo</label>
+                  <span className="flex items-center">
+                    <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                    <span className="shrink-0 px-6">Actividades relevantes del periodo</span>
+                    <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                  </span>
                   <div>
                     <ModalAgregarActividades agregarActividad={agregarActividad} />
                     <TablaActividades actividades={actividades} />
                   </div>
+                  <span className="flex items-center">
+                    <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                    <span className="shrink-0 px-6">Problemas</span>
+                    <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                  </span>
                   <div>
                     <ModalAgregarProblema agregarProblema={agregarProblema} />
                     <TablaProblema problemas={problemas} />

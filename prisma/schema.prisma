@@ -54,6 +54,7 @@ model Project {
   conceptos         Conceptos[]
   actividades       Actividad[]
   problemas         Problemas[]
+  photos            Photos[]
 }
 
 model Service {
@@ -90,6 +91,7 @@ model Conceptos {
   updatedAt     DateTime @updatedAt
   projectId     Int
   project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  photos        Photos[]
 }
 
 model Actividad {
@@ -110,4 +112,13 @@ model Problemas {
   updatedAt DateTime @updatedAt
   projectId Int
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Photos {
+  id        Int       @id @default(autoincrement())
+  url       String
+  conceptId Int
+  conceptos Conceptos @relation(fields: [conceptId], references: [id])
+  Project   Project?  @relation(fields: [projectId], references: [id])
+  projectId Int?
 }

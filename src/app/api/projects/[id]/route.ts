@@ -13,7 +13,11 @@ export async function GET(
 		include: {
 			servicios: true,
 			acuerdos: true,
-			conceptos: true,
+			conceptos: {
+				include: {
+					photos: true,
+				},
+			},
 			actividades: true,
 			problemas: true,
 		},

@@ -128,7 +128,7 @@ export async function PUT(
 				),
 			},
 			conceptos: {
-				deleteMany: [{ projectId: parseInt(params.id) }], // Borra todos los conceptos actuales
+				deleteMany: [{ projectId: parseInt(params.id) }], 
 				create: data.conceptos.map(
 					(concepto: {
 						concepto: any;

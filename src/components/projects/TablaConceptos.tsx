@@ -1,7 +1,12 @@
 import React from 'react'
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Chip } from "@nextui-org/react";
 
-function TablaConceptos({ conceptos }: { conceptos: any[] }) {
+interface TablaConceptosProps {
+  conceptos: any[]; 
+  eliminarConceptos: () => void;
+}
+
+function TablaConceptos({ conceptos, eliminarConceptos }: TablaConceptosProps) {
   return (
     <Table aria-label="Example empty table">
       <TableHeader>

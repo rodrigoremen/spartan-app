@@ -1,7 +1,12 @@
 import React from 'react'
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 
-function TablaAcuerdos({ acuerdos }: { acuerdos: any[] }) {
+interface TablaAcuerdosProps {
+    acuerdos: any[]; 
+    eliminarAcuerdos: () => void;
+  }
+
+function TablaAcuerdos({ acuerdos, eliminarAcuerdos }: TablaAcuerdosProps) {
     return (
         <Table aria-label="Example empty table">
             <TableHeader>

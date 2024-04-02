@@ -1,8 +1,12 @@
 import React from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 
+interface TablaServiciosProps {
+  servicios: any[]; 
+  eliminarServicios: () => void;
+}
 
-function TablaServicios({ servicios }: { servicios: any[] }) {
+function TablaServicios({ servicios, eliminarServicios }: TablaServiciosProps) {
   return (
     <Table aria-label="Example empty table">
       <TableHeader>

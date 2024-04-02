@@ -21,8 +21,6 @@ import TablaActividades from '@/components/projects/TablaActividades';
 import ModalAgregarProblema from '@/components/projects/ModalAgregarProblema';
 import TablaProblema from '@/components/projects/TablaProblema';
 
-
-
 function NewProjectPage() {
 
   const { control, handleSubmit, setValue } = useForm(
@@ -66,14 +64,26 @@ function NewProjectPage() {
     setServicios((prevServicios: any[]) => [...prevServicios, servicio]);
   };
 
+  const eliminarServicios = () => {
+    setServicios([]);
+  };
+
   const [acuerdos, setAcuerdos] = React.useState<any[]>([])
   const agregarAcuerdo = (acuerdo: any) => {
     setAcuerdos((prevAcuerdos: any[]) => [...prevAcuerdos, acuerdo]);
   };
 
+  const eliminarAcuerdos = () => {
+    setAcuerdos([]);
+  }
+
   const [conceptos, setConceptos] = React.useState<any[]>([])
   const agregarConcepto = (concepto: any) => {
     setConceptos((prevConceptos: any[]) => [...prevConceptos, concepto]);
+  };
+
+  const eliminarConceptos = () => {
+    setConceptos([]);
   };
 
   const [actividades, setActividades] = React.useState<any[]>([])
@@ -81,10 +91,18 @@ function NewProjectPage() {
     setActividades((prevActividades: any[]) => [...prevActividades, actividad]);
   };
 
+  const eliminarActividades = () => {
+    setActividades([]);
+  }
+
   const [problemas, setProblemas] = React.useState<any[]>([])
   const agregarProblema = (problema: any) => {
     setProblemas((prevProblemas: any[]) => [...prevProblemas, problema]);
   };
+
+  const eliminarProblemas = () => {
+    setProblemas([]);
+  }
 
   const onSubmit = handleSubmit(async (data) => {
     const newData = { ...data, servicios, acuerdos, conceptos, actividades, problemas };
@@ -578,13 +596,27 @@ function NewProjectPage() {
             <div className=''>
               {
                 session?.user?.role === 'tecnico' ? (
-                  <Button isDisabled variant='flat' color="warning" className='mb-3'>
-                    Agregar servicio
-                  </Button>
+                  <>
+                    <div className='flex gap-3'>
+                      <Button isDisabled variant='flat' color="warning" className='mb-3'>
+                        Agregar servicio
+                      </Button>
+                      <Button isDisabled variant='flat' color="danger" className='mb-3'>
+                        Eliminar servicio
+                      </Button>
+                    </div>
+                  </>
                 ) :
-                  <ModalAgregarServicio agregarServicio={agregarServicio} />
+                  <>
+                    <div className='flex gap-3'>
+                      <ModalAgregarServicio agregarServicio={agregarServicio} />
+                      <Button variant='flat' color="danger" onClick={eliminarServicios}>
+                        Eliminar servicios
+                      </Button>
+                    </div>
+                  </>
               }
-              <TablaServicios servicios={servicios} />
+              <TablaServicios servicios={servicios} eliminarServicios={eliminarServicios} />
             </div>
             {
               session?.user?.role === 'tecnico' ? (
@@ -845,13 +877,27 @@ function NewProjectPage() {
             <div>
               {
                 session?.user?.role === 'tecnico' ? (
-                  <Button isDisabled variant='flat' color="warning" className='mb-3'>
-                    Agregar acuerdos anteriores
-                  </Button>
+                  <>
+                    <div className='flex gap-3'>
+                      <Button isDisabled variant='flat' color="warning" className='mb-3'>
+                        Agregar Acuerdo
+                      </Button>
+                      <Button isDisabled variant='flat' color="danger" className='mb-3'>
+                        Eliminar Acuerdo
+                      </Button>
+                    </div>
+                  </>
                 ) :
-                  <ModalAgregarAcuerdos agregarAcuerdo={agregarAcuerdo} />
+                  <>
+                    <div className='flex gap-3'>
+                      <ModalAgregarAcuerdos agregarAcuerdo={agregarAcuerdo} />
+                      <Button variant='flat' color='danger' onClick={eliminarAcuerdos}>
+                        Eliminar acuerdos
+                      </Button>
+                    </div>
+                  </>
               }
-              <TablaAcuerdos acuerdos={acuerdos} />
+              <TablaAcuerdos acuerdos={acuerdos} eliminarAcuerdos={eliminarAcuerdos} />
             </div>
             {
               session?.user?.role === 'tecnico' ? (
@@ -921,8 +967,13 @@ function NewProjectPage() {
                     <span className="h-px flex-1 dark:bg-white bg-black"></span>
                   </span>
                   <div>
-                    <ModalAgregarConcepto agregarConcepto={agregarConcepto} />
-                    <TablaConceptos conceptos={conceptos} />
+                    <div className='flex gap-3'>
+                      <ModalAgregarConcepto agregarConcepto={agregarConcepto} />
+                      <Button color="danger" variant='flat' onClick={eliminarConceptos}>
+                        Eliminar conceptos
+                      </Button>
+                    </div>
+                    <TablaConceptos conceptos={conceptos} eliminarConceptos={eliminarConceptos} />
                   </div>
                   <span className="flex items-center">
                     <span className="h-px flex-1 dark:bg-white bg-black"></span>
@@ -930,8 +981,13 @@ function NewProjectPage() {
                     <span className="h-px flex-1 dark:bg-white bg-black"></span>
                   </span>
                   <div>
-                    <ModalAgregarActividades agregarActividad={agregarActividad} />
-                    <TablaActividades actividades={actividades} />
+                    <div className='flex gap-3'>
+                      <ModalAgregarActividades agregarActividad={agregarActividad} />
+                      <Button color="danger" variant='flat' onClick={eliminarActividades}>
+                        Eliminar actividades
+                      </Button>
+                    </div>
+                    <TablaActividades actividades={actividades} eliminarActividades={eliminarActividades} />
                   </div>
                   <span className="flex items-center">
                     <span className="h-px flex-1 dark:bg-white bg-black"></span>
@@ -939,8 +995,13 @@ function NewProjectPage() {
                     <span className="h-px flex-1 dark:bg-white bg-black"></span>
                   </span>
                   <div>
-                    <ModalAgregarProblema agregarProblema={agregarProblema} />
-                    <TablaProblema problemas={problemas} />
+                    <div className='flex gap-3'>
+                      <ModalAgregarProblema agregarProblema={agregarProblema} />
+                      <Button color="danger" variant='flat' onClick={eliminarProblemas}>
+                        Eliminar problemas
+                      </Button>
+                    </div>
+                    <TablaProblema problemas={problemas} eliminarProblemas={eliminarProblemas} />
                   </div>
                 </>
               ) : null

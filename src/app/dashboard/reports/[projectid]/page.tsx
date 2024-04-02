@@ -2,15 +2,20 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useParams } from "next/navigation";
-import { BreadcrumbItem, Breadcrumbs, Input, Card, Image, Button, Select, SelectItem } from "@nextui-org/react";
+import { BreadcrumbItem, Breadcrumbs, Input, Card, Image, Button, Select, SelectItem, Tooltip } from "@nextui-org/react";
 import { Container, Heading } from "@radix-ui/themes";
 import { toast } from 'sonner';
 import { TrashIcon } from "@radix-ui/react-icons";
 
+interface Project {
+  id: string;
+  nombre: string;
+  conceptos: Concepto[];
+}
 
 function ReporteFotografico() {
   const params = useParams() as { projectid: string }
-  const [project, setProject] = useState(null);
+  const [project, setProject] = useState<Project | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [imageURL, setImageURL] = useState<string | null>(null);
   const [conceptId, setConceptId] = useState<string | null>(null);
@@ -110,17 +115,22 @@ function ReporteFotografico() {
       <Container height="100%" className='mt-8 mb-4 p-6'>
         <Card className='p-8'>
           <Heading>Fotos</Heading>
-          {project && project.conceptos.map((concepto) => (
+          {project && project.conceptos.map((concepto: any) => (
             <div key={concepto.id} >
-              <p className="text-lg">{concepto.concepto}</p>
-              {concepto.photos && concepto.photos.map((photo) => (
+              <p className="text-xl font-bold">{concepto.concepto}</p>
+              {concepto.photos && concepto.photos.map((photo: any) => (
                 <div key={photo.id} className="flex items-center p-8 space-x-2">
                   <Image src={photo.url} alt="Imagen del concepto" className="w-1/2 mt-3" />
-                  <Button color="danger" variant="flat" isIconOnly onClick={() => eliminarFoto(photo.id)}>
-                    <TrashIcon />
-                  </Button>
+                  <Tooltip content='Elminar foto' color="danger">
+                    <Button color="danger" variant="flat" isIconOnly onClick={() => eliminarFoto(photo.id)}>
+                      <TrashIcon className="" />
+                    </Button>
+                  </Tooltip>
                 </div>
               ))}
+              {concepto.photos.length === 0 && (
+                <p className="font-medium text-xl text-center text-zinc-500">No hay fotos para este concepto</p>
+              )}
             </div>
           ))}
         </Card>

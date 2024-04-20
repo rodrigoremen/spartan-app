@@ -20,8 +20,8 @@ function TablaServicios({ servicios, eliminarServicios }: TablaServiciosProps) {
           <TableRow key={index}>
             <TableCell>{servicio.cantidad}</TableCell>
             <TableCell>{servicio.descripcion}</TableCell>
-            <TableCell>{servicio.precioUnitario}</TableCell>
-            <TableCell>{servicio.importe}</TableCell>
+            <TableCell>${servicio.precioUnitario}</TableCell>
+            <TableCell>${servicio.importe}</TableCell>
           </TableRow>
         ))}
       </TableBody>

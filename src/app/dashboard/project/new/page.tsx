@@ -136,13 +136,11 @@ function NewProjectPage() {
   const handleDelete = async (projectid: string) => {
     console.log(projectid)
     const resp = await axios.delete(`/api/projects/${projectid}`)
-
     if (resp.status === 200) {
       toast.success('Proyecto eliminado correctamente')
     }
     router.push('/dashboard')
     router.refresh()
-
     console.log(resp)
   }
 
@@ -151,7 +149,7 @@ function NewProjectPage() {
       axios.get(`/api/projects/${params.projectid}`)
         .then((resp) => {
           const project = resp.data
-          setValue('revision', project.revision)
+          setValue('revision', project.revision + 1)
           setValue('folio', project.folio)
           setValue('cliente', project.cliente)
           setValue('proyecto', project.proyecto)

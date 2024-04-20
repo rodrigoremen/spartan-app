@@ -119,6 +119,6 @@ model Photos {
   url       String
   conceptId Int
   conceptos Conceptos @relation(fields: [conceptId], references: [id])
-  Project   Project?  @relation(fields: [projectId], references: [id])
+  Project   Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId Int?
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input, Textarea } from "@nextui-org/react";
 
 function ModalAgregarServicio({ agregarServicio }: { agregarServicio: any }) {
@@ -8,9 +8,16 @@ function ModalAgregarServicio({ agregarServicio }: { agregarServicio: any }) {
     const [precioUnitario, setPrecioUnitario] = useState("");
     const [importe, setImporte] = useState("");
 
+    useEffect(() => {
+        if (cantidad && precioUnitario) {
+            setImporte((parseInt(cantidad) * parseFloat(precioUnitario)).toFixed(2));
+        }
+    }, [cantidad, precioUnitario]);
+
     const handleSubmit = () => {
         agregarServicio({ cantidad, descripcion, precioUnitario, importe });
         onOpenChange();
+        
     };
 
     return (
@@ -52,19 +59,6 @@ function ModalAgregarServicio({ agregarServicio }: { agregarServicio: any }) {
                                         placeholder="0.00"
                                         value={precioUnitario}
                                         onChange={(e) => setPrecioUnitario(e.target.value)}
-                                        startContent={
-                                            <div className="pointer-events-none flex items-center">
-                                                <span className="text-default-400 text-small">$</span>
-                                            </div>
-                                        }
-                                    />
-                                    <Input
-                                        isRequired
-                                        type="number"
-                                        label="Importe"
-                                        placeholder="0.00"
-                                        value={importe}
-                                        onChange={(e) => setImporte(e.target.value)}
                                         startContent={
                                             <div className="pointer-events-none flex items-center">
                                                 <span className="text-default-400 text-small">$</span>

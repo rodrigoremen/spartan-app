@@ -48,13 +48,13 @@ function ProjectsTable({ projects }: any) {
               <TableCell>{project.folio}</TableCell>
               <TableCell>{project.proyecto}</TableCell>
               <TableCell>{project.fechaEntrega.toLocaleDateString()}</TableCell>
-              <TableCell>{project.acuerdos[0].fechaEntrega}</TableCell>
+              <TableCell>{project.acuerdos[0]?.fechaEntrega || ''}</TableCell>
               <TableCell>
                 <Chip className="capitalize" color="warning" size="sm" variant="flat">
                   {project.avanceProduccion}%
                 </Chip>
               </TableCell>
-              <TableCell>{project.acuerdos[0].responsable}</TableCell>
+              <TableCell>{project.acuerdos[0]?.responsable || null}</TableCell>
               <TableCell>
                 <Tooltip  content="Ver proyecto">
                   <Button isIconOnly color='warning' variant="light" onPress={() => router.push(`/dashboard/project/${project.id}`)} className="text-lg flex justify-center cursor-pointer active:opacity-50">

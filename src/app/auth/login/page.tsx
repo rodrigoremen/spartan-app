@@ -13,16 +13,6 @@ function LoginPage() {
                             Iniciar Sesión
                         </Heading>
                         <SignInForm />
-                        <Flex justify="between" my="4">
-                            <Text>
-                                No tienes cuenta?
-                            </Text>
-                            <Link asChild>
-                                <NavLink href="/auth/register" passHref>
-                                    Regístrate!
-                                </NavLink>
-                            </Link>
-                        </Flex>
                     </Card>
                 </Flex>
             </Container>

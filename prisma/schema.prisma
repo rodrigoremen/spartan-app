@@ -122,3 +122,14 @@ model Photos {
   Project   Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId Int?
 }
+
+model Visita {
+  id        Int      @id @default(autoincrement())
+  proyecto  String
+  proceso   String?
+  lugar     String?
+  gasto     String?
+  norma     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

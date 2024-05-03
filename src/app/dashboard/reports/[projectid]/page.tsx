@@ -20,7 +20,6 @@ function ReporteFotografico() {
   const [imageURL, setImageURL] = useState<string | null>(null);
   const [conceptId, setConceptId] = useState<string | null>(null);
 
-
   const onSubmit = async (e: any) => {
     e.preventDefault();
     const formData = new FormData();

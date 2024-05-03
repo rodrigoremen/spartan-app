@@ -76,7 +76,12 @@ function NavBar() {
                                 </NavbarItem>
                                 <NavbarItem>
                                     <Link href="/dashboard/reports" color="foreground" className='font-bold'>
-                                        Reportes
+                                        Archivos adjuntos
+                                    </Link>
+                                </NavbarItem>
+                                <NavbarItem>
+                                    <Link href="/dashboard/visita" color="foreground" className='font-bold'>
+                                        Reporte de visita
                                     </Link>
                                 </NavbarItem>
                             </>

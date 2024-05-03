@@ -8,6 +8,7 @@ import React from 'react'
 import { useForm, Controller } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 function SignInForm() {
 
@@ -29,8 +30,11 @@ function SignInForm() {
         });
         if (!res?.ok) {
             console.log(res);
+            toast.error('Credenciales inválidas, por favor intente de nuevo');
+        } else {
+            toast.success('Inicio de sesión exitoso!'); 
+            router.push('/dashboard');
         }
-        router.push('/dashboard');
     });
 
 

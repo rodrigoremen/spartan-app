@@ -125,11 +125,12 @@ model Photos {
 
 model Visita {
   id        Int      @id @default(autoincrement())
-  proyecto  String
+  titulo    String
   proceso   String?
   lugar     String?
   gasto     String?
   norma     String?
+  visita    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

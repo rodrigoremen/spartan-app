@@ -52,7 +52,7 @@ function NewProjectPage() {
         situacionGeneral: '',
         actividades: [],
         problemas: [],
-        //añadir esto a la base de datos
+
       }
     }
   )

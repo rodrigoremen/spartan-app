@@ -9,7 +9,6 @@ import Image from "next/image";
 import React from 'react'
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { set } from 'date-fns';
 
 
 function SignUpForm() {

@@ -161,19 +161,6 @@ export async function PUT(
 					})
 				),
 			},
-			avanceProduccion: {
-				create: data.avanceProduccion.map(
-					(avanceProduccion: {
-						titulo: string;
-						descripcion: string;
-						avance: number;
-					}) => ({
-						titulo: avanceProduccion.titulo,
-						descripcion: avanceProduccion.descripcion,
-						avance: avanceProduccion.avance,
-					})
-				),
-			},
 		},
 	});
 

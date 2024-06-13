@@ -33,6 +33,7 @@ function ProduccionPage() {
   const totalTareas = tarea.length;
   const avanceTareas = tarea.reduce((total, tarea) => total + tarea.avance, 0);
   const avance = Math.floor((avanceTareas / (totalTareas * 100)) * 100);
+  console.log('avance', avance)
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -112,9 +113,9 @@ function ProduccionPage() {
             <div className='flex justify-between mt-6 px-24'>
               <div className='grid gap-2 '>
                 <Chip color="default" variant='solid'>Estatus</Chip>
-                <Chip color="success">No iniciado</Chip>
+                <Chip color="danger">No iniciado</Chip>
                 <Chip color="warning">En proceso</Chip>
-                <Chip color="danger">Terminado</Chip>
+                <Chip color="success">Terminado</Chip>
               </div>
               <div className='flex'>
                 <Table aria-label="Example static collection table">
@@ -125,7 +126,11 @@ function ProduccionPage() {
                   <TableBody>
                     <TableRow key="1">
                       <TableCell>Avance producción</TableCell>
-                      <TableCell>{avance || '- '}% </TableCell>
+                      <TableCell>
+                        { Number.isNaN(avance) ? <Chip color="danger">No iniciado</Chip> : ''}
+                        { avance > 0 && avance < 90 ? <Chip color="warning">{avance}%</Chip> : ''}
+                        { avance >= 90 ? <Chip color="success">{avance}%</Chip> : ''}
+                        </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>

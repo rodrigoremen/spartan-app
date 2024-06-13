@@ -23,9 +23,9 @@ model User {
 }
 
 model Project {
-  id                Int         @id @default(autoincrement())
+  id                Int                @id @default(autoincrement())
   revision          Float
-  folio             String      @unique
+  folio             String             @unique
   cliente           String
   proyecto          String
   fechaEntrega      DateTime
@@ -34,27 +34,26 @@ model Project {
   elaborado         String
   autorizado        String
   atencion          String
-  estado            Int?        @default(0)
+  estado            Int?               @default(0)
   notas             String
   tiempoEntrega     String
   nota              String
   normas            String
   incluye           String
   formaPago         String
-  avanceFinanciero  Int?        @default(0)
-  avanceProduccion  Int?        @default(0)
-  avanceInstalacion Int?        @default(0)
+  avanceFinanciero  Int?               @default(0)
   situacionGeneral  String?
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
   userId            Int
-  user              User        @relation(fields: [userId], references: [id])
+  user              User               @relation(fields: [userId], references: [id])
   servicios         Service[]
   acuerdos          Acuerdos[]
   conceptos         Conceptos[]
   actividades       Actividad[]
   problemas         Problemas[]
   photos            Photos[]
+  avanceProduccion  AvanceProduccion[]
 }
 
 model Service {
@@ -102,6 +101,17 @@ model Actividad {
   updatedAt     DateTime @updatedAt
   projectId     Int
   project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model AvanceProduccion {
+  id          String   @id @default(uuid())
+  titulo      String
+  descripcion String
+  avance      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  projectId   Int
+  project     Project  @relation(fields: [projectId], references: [id])
 }
 
 model Problemas {

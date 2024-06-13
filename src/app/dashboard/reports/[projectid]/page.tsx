@@ -120,7 +120,7 @@ function ReporteFotografico() {
               {concepto.photos && concepto.photos.map((photo: any) => (
                 <div key={photo.id} className="flex items-center p-8 space-x-2">
                   <Image src={photo.url} alt="Imagen del concepto" className="w-1/2 mt-3" />
-                  <Tooltip content='Elminar foto' color="danger">
+                  <Tooltip content='Eliminar foto' color="danger">
                     <Button color="danger" variant="flat" isIconOnly onClick={() => eliminarFoto(photo.id)}>
                       <TrashIcon className="" />
                     </Button>

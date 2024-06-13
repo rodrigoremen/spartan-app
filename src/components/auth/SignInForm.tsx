@@ -33,7 +33,7 @@ function SignInForm() {
             toast.error('Credenciales inválidas, por favor intente de nuevo');
         } else {
             toast.success('Inicio de sesión exitoso!'); 
-            router.push('/dashboard');
+            router.push('/dashboard/proyectos');
         }
     });
 

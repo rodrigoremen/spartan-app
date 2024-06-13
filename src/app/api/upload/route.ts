@@ -11,7 +11,7 @@ cloudinary.config({
 export async function POST(request: Request) {
 	const data = await request.formData();
 	const file = data.get('file') as File;
-    const conceptId = data.get('conceptId') as string;
+	const conceptId = data.get('conceptId') as string;
 
 	if (!file || !conceptId) {
 		return NextResponse.json('no hay archivo o Concepto', { status: 400 });
@@ -31,12 +31,12 @@ export async function POST(request: Request) {
 			.end(buffer);
 	});
 
-    const photo = await prisma.photos.create({
-        data: {
-          url: resp.secure_url,
-          conceptId: parseInt(conceptId),
-        },
-      });
+	const photo = await prisma.photos.create({
+		data: {
+			url: resp.secure_url,
+			conceptId: parseInt(conceptId),
+		},
+	});
 
 	return NextResponse.json({
 		message: 'Imagen subida correctamente',

@@ -9,6 +9,7 @@ import Image from "next/image";
 import React from 'react'
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 
 function SignUpForm() {
@@ -27,26 +28,29 @@ function SignUpForm() {
     const router = useRouter();
 
     const onSubmit = handleSubmit(async (data) => {
-        const resp = await axios.post('/api/auth/register', data)
+        try {
+            const resp = await axios.post('/api/auth/register', data)
+            if (resp.status === 201) {
+                const result = await signIn('credentials', {
+                    redirect: false,
+                    email: resp.data.email,
+                    password: data.password,
+                });
 
-        if (resp.status === 201) {
-            const result = await signIn('credentials', {
-                redirect: false,
-                email: resp.data.email,
-                password: data.password,
-            });
-
-            if (!result?.ok) {
-                console.log(result?.error);
-                return;
+                if (!result?.ok) {
+                    console.log(result?.error);
+                    return;
+                }
+                toast.success('Usuario registrado exitosamente');
+                router.push('/dashboard/proyectos');
             }
-
-            router.push('/dashboard/proyectos');
+            console.log(data);
+            console.log(resp)
+        } catch (error: any) {
+            console.error('Error saving user', error);
+            const errorMessage = error.response?.data?.message || 'Error al guardar usuario';
+            toast.error(errorMessage);
         }
-
-        console.log(data);
-
-        console.log(resp)
     });
 
     const [isVisible, setIsVisible] = React.useState(false);
@@ -160,7 +164,7 @@ function SignUpForm() {
                                 {...field}
                                 type="text"
                                 label="Apellidos"
-                                placeholder="Zandoval"
+                                placeholder="Sandoval"
                                 startContent={
                                     <PersonIcon height="16" width="16" />
                                 }

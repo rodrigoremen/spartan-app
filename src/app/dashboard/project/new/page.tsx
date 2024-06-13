@@ -47,12 +47,9 @@ function NewProjectPage() {
         acuerdos: [],
         avanceFinanciero: '',
         conceptos: [],
-        avanceProduccion: '',
-        avanceInstalacion: '',
         situacionGeneral: '',
         actividades: [],
         problemas: [],
-
       }
     }
   )
@@ -168,8 +165,6 @@ function NewProjectPage() {
           setValue('normas', project.normas);
           setValue('avanceFinanciero', project.avanceFinanciero);
           setAcuerdos(project.acuerdos || []);
-          setValue('avanceProduccion', project.avanceProduccion);
-          setValue('avanceInstalacion', project.avanceInstalacion);
           setValue('situacionGeneral', project.situacionGeneral);
           setConceptos(project.conceptos || []);
           setActividades(project.actividades || []);
@@ -905,45 +900,13 @@ function NewProjectPage() {
                     <span className="shrink-0 px-6">Avances del proyecto</span>
                     <span className="h-px flex-1 dark:bg-white bg-black"></span>
                   </span>
-                  <div className='flex gap-x-3'>
-                    <Controller
-                      name='avanceProduccion'
-                      control={control}
-                      render={({ field }) => {
-                        return (
-                          <Input
-                            {...field}
-                            isRequired
-                            type="number"
-                            label="Avance de producción"
-                            startContent={
-                              <div className="pointer-events-none flex items-center">
-                                <span className="text-default-400 text-small">%</span>
-                              </div>
-                            }
-                          />
-                        )
-                      }}
-                    />
-                    <Controller
-                      name='avanceInstalacion'
-                      control={control}
-                      render={({ field }) => {
-                        return (
-                          <Input
-                            {...field}
-                            isRequired
-                            type="number"
-                            label="Avance de instalación"
-                            startContent={
-                              <div className="pointer-events-none flex items-center">
-                                <span className="text-default-400 text-small">%</span>
-                              </div>
-                            }
-                          />
-                        )
-                      }}
-                    />
+                  <div className='flex justify-between'>
+                    <Button color="warning" variant='flat' onClick={() => router.push(`/dashboard/project/avance/produccion/${params.projectid}`)}>
+                      Avance de producción
+                    </Button>
+                    <Button color="warning" variant='flat'>
+                      Avance de instalación
+                    </Button>
                   </div>
                   <Controller
                     name='situacionGeneral'

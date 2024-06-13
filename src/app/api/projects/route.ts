@@ -32,8 +32,6 @@ export async function POST(request: Request) {
 				incluye: data.incluye,
 				formaPago: data.formaPago,
 				avanceFinanciero: parseInt(data.avanceFinanciero),
-				avanceProduccion: parseInt(data.avanceProduccion),
-				avanceInstalacion: parseInt(data.avanceInstalacion),
 				situacionGeneral: data.situacionGeneral,
 				user: {
 					connect: {

@@ -47,28 +47,6 @@ function InicioPage() {
                     />
                 </div>
             </div>
-            <footer className="">
-                <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
-                    <div className="sm:flex sm:items-center sm:justify-between">
-                        <div className="flex justify-center sm:justify-start">
-                            <User
-                                name="Rodrigo Dorantes"
-                                description={(
-                                    <Link href="https://github.com/rodrigoremen" size="sm" isExternal>
-                                        @rodrigoremen
-                                    </Link>
-                                )}
-                                avatarProps={{
-                                    src: "https://avatars.githubusercontent.com/u/106606020?v=4"
-                                }}
-                            />
-                        </div>
-                        <p className="mt-4 text-center text-sm text-gray-500 lg:mt-0 lg:text-right">
-                            Copyright &copy; 2022. All rights reserved.
-                        </p>
-                    </div>
-                </div>
-            </footer>
         </div>
     )
 }

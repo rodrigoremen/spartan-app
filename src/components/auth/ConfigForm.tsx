@@ -24,12 +24,7 @@ function ConfigForm() {
 
     const router = useRouter();
     const { data: session } = useSession();
-    const [isVisible, setIsVisible] = useState(false);
-    const [isVisible1, setIsVisible1] = useState(false);
-    const [isVisible2, setIsVisible2] = useState(false);
-    const toggleVisibility = () => setIsVisible(!isVisible);
-    const toggleVisibility1 = () => setIsVisible1(!isVisible1);
-    const toggleVisibility2 = () => setIsVisible2(!isVisible2);
+   
 
     const onSubmit = handleSubmit(async (data) => {
         try {
@@ -56,6 +51,18 @@ function ConfigForm() {
             setValue('email', session.user.email);
         }
     }, [session])
+
+    const handlePassword = async (data: any) => {
+        try {
+            console.log(data)
+            const resp = await axios.put('/api/auth/update/password', data);
+            if (resp.status === 200) {
+                toast.success('Contraseña actualizada exitosamente');
+            }
+        } catch (error: any) {
+            toast.error(error.response.data.message || 'Error al actualizar la contraseña');
+        }
+    }
 
     return (
         <>
@@ -100,7 +107,7 @@ function ConfigForm() {
                                         isRequired
                                         type='text'
                                         label="Apellido"
-                                        
+
                                         startContent={
                                             <PersonIcon height="16" width="16" />
                                         }
@@ -120,7 +127,7 @@ function ConfigForm() {
                                     isRequired
                                     type='email'
                                     label="Correo"
-                                    
+
                                     className='mt-3'
                                     startContent={
                                         <EnvelopeClosedIcon height="16" width="16" />
@@ -140,79 +147,6 @@ function ConfigForm() {
                     </Button>
                 </div>
             </form>
-            <div className='py-7'>
-                <form >
-                <h1 className='text-lg font-bold py-3'>Cambiar contraseña</h1>
-                <Input
-                    isRequired
-                    label="Contraseña actual"
-                    placeholder="*********"
-                    className='mt-3'
-                    startContent={
-                        <LockClosedIcon height="16" width="16" />
-                    }
-                    endContent={
-                        <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
-                            {isVisible ? (
-                                <EyeOpenIcon className="text-2xl text-default-400 pointer-events-none" />
-                            ) : (
-                                <EyeClosedIcon className="text-2xl text-default-400 pointer-events-none" />
-                            )}
-                        </button>
-                    }
-                    type={isVisible ? "text" : "password"}
-                />
-                
-                <hr className='mt-5'/>
-                <Input
-                    isRequired
-                    label="Nueva contraseña"
-                    placeholder="*********"
-                    className='mt-3'
-                    startContent={
-                        <LockClosedIcon height="16" width="16" />
-                    }
-                    endContent={
-                        <button className="focus:outline-none" type="button" onClick={toggleVisibility1}>
-                            {isVisible1 ? (
-                                <EyeOpenIcon className="text-2xl text-default-400 pointer-events-none" />
-                            ) : (
-                                <EyeClosedIcon className="text-2xl text-default-400 pointer-events-none" />
-                            )}
-                        </button>
-                    }
-                    type={isVisible1 ? "text" : "password"}
-                />
-                <Input
-                    isRequired
-                    label="Repite la contraseña"
-                    placeholder="*********"
-                    className='mt-3'
-                    startContent={
-                        <LockClosedIcon height="16" width="16" />
-                    }
-                    endContent={
-                        <button className="focus:outline-none" type="button" onClick={toggleVisibility2}>
-                            {isVisible2 ? (
-                                <EyeOpenIcon className="text-2xl text-default-400 pointer-events-none" />
-                            ) : (
-                                <EyeClosedIcon className="text-2xl text-default-400 pointer-events-none" />
-                            )}
-                        </button>
-                    }
-                    type={isVisible2 ? "text" : "password"}
-                />
-                <Button
-                    type='submit'
-                    className='mt-3'
-                    variant='flat'
-                    color='warning'
-                >
-                    Cambiar contraseña
-                </Button>
-                </form>
-            </div>
-
         </>
     )
 }

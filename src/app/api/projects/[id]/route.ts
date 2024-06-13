@@ -20,6 +20,7 @@ export async function GET(
 			},
 			actividades: true,
 			problemas: true,
+			avanceProduccion: true,
 		},
 	});
 	if (!project) {
@@ -89,8 +90,6 @@ export async function PUT(
 			incluye: data.incluye,
 			formaPago: data.formaPago,
 			avanceFinanciero: parseInt(data.avanceFinanciero),
-			avanceProduccion: parseInt(data.avanceProduccion),
-			avanceInstalacion: parseInt(data.avanceInstalacion),
 			situacionGeneral: data.situacionGeneral,
 			servicios: {
 				deleteMany: [{ projectId: parseInt(params.id) }], // Borra todos los servicios actuales
@@ -159,6 +158,19 @@ export async function PUT(
 					(problema: { problemas: string; respuesta: string }) => ({
 						problemas: problema.problemas,
 						respuesta: problema.respuesta,
+					})
+				),
+			},
+			avanceProduccion: {
+				create: data.avanceProduccion.map(
+					(avanceProduccion: {
+						titulo: string;
+						descripcion: string;
+						avance: number;
+					}) => ({
+						titulo: avanceProduccion.titulo,
+						descripcion: avanceProduccion.descripcion,
+						avance: avanceProduccion.avance,
 					})
 				),
 			},

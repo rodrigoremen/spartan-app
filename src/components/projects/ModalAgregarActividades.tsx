@@ -28,6 +28,7 @@ function ModalAgregarActividades({ agregarActividad }: { agregarActividad: any }
                             <ModalHeader className="flex flex-col gap-1">Agrega actividad relevantes del periodo</ModalHeader>
                             <ModalBody>
                                 <Input
+                                    autoFocus
                                     label="Actividad"
                                     isRequired
                                     type="text"

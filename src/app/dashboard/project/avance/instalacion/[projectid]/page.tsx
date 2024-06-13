@@ -8,13 +8,12 @@ import { useRouter, useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSession } from 'next-auth/react';
 import { PaperPlaneIcon, PersonIcon } from '@radix-ui/react-icons';
-import ModalAgregrarAvanceProd from '@/components/projects/avance/ModalAgregrarAvanceProd';
-import TablaAvanceProd from '@/components/projects/avance/TablaAvanceProd';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import TablaAvanceIns from '@/components/projects/avance/TablaAvanceIns';
+import ModalAgregrarAvanceIns from '@/components/projects/avance/ModalAvanceIns';
 
-
-function ProduccionPage() {
+function InstalacionPage() {
 
   const [project, setProject] = useState<Project | null>(null);
   const params = useParams() as { projectid: string }
@@ -33,11 +32,10 @@ function ProduccionPage() {
   const totalTareas = tarea.length;
   const avanceTareas = tarea.reduce((total, tarea) => total + tarea.avance, 0);
   const avance = Math.floor((avanceTareas / (totalTareas * 100)) * 100);
-  console.log('avance', avance)
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const resp = await axios.post(`/api/projects/${params.projectid}/avanceProd`, { ...data, tarea });
+      const resp = await axios.post(`/api/projects/${params.projectid}/avanceIns`, { ...data, tarea });
       console.log(resp);
       if (resp.status === 201) {
         toast.success("Avance guardado exitosamente");
@@ -49,11 +47,10 @@ function ProduccionPage() {
       toast.error(errorMessage);
     }
   });
-
   const handleDelete = async (index: any) => {
     try {
       console.log('eliminando tarea', index)
-      const resp = await axios.delete(`/api/projects/${params.projectid}/avanceProd`, { data: { id: index } });
+      const resp = await axios.delete(`/api/projects/${params.projectid}/avanceIns`, { data: { id: index } });
       if (resp.status === 200) {
         router.refresh();
         toast.success('Tarea eliminada exitosamente');
@@ -67,29 +64,26 @@ function ProduccionPage() {
 
   useEffect(() => {
     async function loadProject() {
-        try {
-            const response = await axios.get(`/api/projects/${params.projectid}`);
-            setProject(response.data);
-        } catch (error) {
-            console.error("Error loading project", error);
-        }
+      try {
+        const response = await axios.get(`/api/projects/${params.projectid}`);
+        setProject(response.data);
+      } catch (error) {
+        console.error("Error loading project", error);
+      }
     }
 
     async function loadAvance() {
-        try {
-            const response = await axios.get(`/api/projects/${params.projectid}/avanceProd`);
-            setTarea(response.data);
-        } catch (error) {
-            console.error("Error loading avance", error);
-        }
+      try {
+        const response = await axios.get(`/api/projects/${params.projectid}/avanceIns`);
+        setTarea(response.data);
+      } catch (error) {
+        console.error("Error loading avance", error);
+      }
     }
 
     loadProject();
     loadAvance();
-}, [params.projectid]);
-
-
-  
+  }, [params.projectid]);
   return (
     <div className='p-8'>
       <Breadcrumbs className='mt-6'>
@@ -127,17 +121,18 @@ function ProduccionPage() {
                     <TableRow key="1">
                       <TableCell>Avance producción</TableCell>
                       <TableCell>
-                        { Number.isNaN(avance) ? <Chip color="danger">No iniciado</Chip> : ''}
-                        { avance > 0 && avance < 90 ? <Chip color="warning">{avance}%</Chip> : ''}
-                        { avance >= 90 ? <Chip color="success">{avance}%</Chip> : ''}
-                        </TableCell>
+                        {Number.isNaN(avance) ? <Chip color="danger">No iniciado</Chip> : ''}
+                        {avance > 0 && avance < 90 ? <Chip color="warning">{avance}%</Chip> : ''}
+                        {avance >= 90 ? <Chip color="success">{avance}%</Chip> : ''}
+                      </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
               </div>
             </div>
             <div className='mt-6'>
-              <TablaAvanceProd tarea={tarea} onEliminar={handleDelete} />             <ModalAgregrarAvanceProd agregarTarea={agregarTarea} />
+              <TablaAvanceIns tarea={tarea} onEliminar={handleDelete} />            
+              <ModalAgregrarAvanceIns agregarTarea={agregarTarea} />
             </div>
             <div className='mt-6'>
               <Button type="submit" variant='flat' color='success' className='' startContent={
@@ -153,4 +148,4 @@ function ProduccionPage() {
   )
 }
 
-export default ProduccionPage
+export default InstalacionPage

@@ -54,6 +54,7 @@ model Project {
   problemas         Problemas[]
   photos            Photos[]
   avanceProduccion  AvanceProduccion[]
+  avanceInstalacion AvanceInstalacion[]
 }
 
 model Service {
@@ -104,6 +105,17 @@ model Actividad {
 }
 
 model AvanceProduccion {
+  id          String   @id @default(uuid())
+  titulo      String
+  descripcion String
+  avance      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  projectId   Int
+  project     Project  @relation(fields: [projectId], references: [id])
+}
+
+model AvanceInstalacion {
   id          String   @id @default(uuid())
   titulo      String
   descripcion String

@@ -904,7 +904,7 @@ function NewProjectPage() {
                     <Button color="warning" variant='flat' onClick={() => router.push(`/dashboard/project/avance/produccion/${params.projectid}`)}>
                       Avance de producción
                     </Button>
-                    <Button color="warning" variant='flat'>
+                    <Button color="warning" variant='flat' onClick={() => router.push(`/dashboard/project/avance/instalacion/${params.projectid}`)}>
                       Avance de instalación
                     </Button>
                   </div>

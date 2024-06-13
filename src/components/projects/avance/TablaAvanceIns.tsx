@@ -2,12 +2,12 @@ import { Button, Chip, Table, TableBody, TableCell, TableColumn, TableHeader, Ta
 import { TrashIcon } from '@radix-ui/react-icons';
 import React from 'react'
 
-interface TablaAvanceProdProps {
+interface TablaAvanceInsProps {
     tarea: any[];
     onEliminar: (index: number) => void;
 }
 
-function TablaAvanceProd({ tarea, onEliminar }: TablaAvanceProdProps) {
+function TablaAvanceIns({ tarea, onEliminar }: TablaAvanceInsProps) {
     return (
         <Table>
             <TableHeader>
@@ -42,4 +42,4 @@ function TablaAvanceProd({ tarea, onEliminar }: TablaAvanceProdProps) {
     )
 }
 
-export default TablaAvanceProd
+export default TablaAvanceIns

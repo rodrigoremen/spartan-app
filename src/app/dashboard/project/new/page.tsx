@@ -12,7 +12,6 @@ import { useForm, Controller } from 'react-hook-form';
 import { useRouter, useParams } from "next/navigation";
 import { toast } from 'sonner';
 import 'react-datepicker/dist/react-datepicker.css';
-import ModalAgregarAcuerdos from '@/components/projects/ModalAgregarAcuerdos';
 import TablaAcuerdos from '@/components/projects/TablaAcuerdos';
 import ModalAgregarConcepto from '@/components/projects/ModalAgregarConcepto';
 import TablaConceptos from '@/components/projects/TablaConceptos';
@@ -20,6 +19,8 @@ import ModalAgregarActividades from '@/components/projects/ModalAgregarActividad
 import TablaActividades from '@/components/projects/TablaActividades';
 import ModalAgregarProblema from '@/components/projects/ModalAgregarProblema';
 import TablaProblema from '@/components/projects/TablaProblema';
+import ModalAgregarAcuerdosAdmin from '@/components/projects/ModalAgregarAcuerdosAdmin';
+import ModalAgregarAcuerdoOpe from '@/components/projects/ModalAgregarAcuerdoOpe';
 
 function NewProjectPage() {
 
@@ -102,7 +103,23 @@ function NewProjectPage() {
   }
 
   const onSubmit = handleSubmit(async (data) => {
-    const newData = { ...data, servicios, acuerdos, conceptos, actividades, problemas };
+    const acuerdosConFechaISO = acuerdos.map(acuerdo => {
+      let fechaEntregaISO = acuerdo.fechaEntrega;
+      if (fechaEntregaISO && typeof fechaEntregaISO !== 'string') {
+        const fechaEntregaDate = new Date(fechaEntregaISO).getTime();
+        if (!isNaN(fechaEntregaDate)) {
+          fechaEntregaISO = fechaEntregaDate.toString();
+        } else {
+          console.error('Fecha de entrega no válida:', acuerdo.fechaEntrega);
+          fechaEntregaISO = null;
+        }
+      }
+      return {
+        ...acuerdo,
+        fechaEntrega: fechaEntregaISO
+      };
+    });
+    const newData = { ...data, servicios, acuerdos: acuerdosConFechaISO, conceptos, actividades, problemas };
     try {
       if (!params.projectid) {
         const resp = await axios.post('/api/projects', newData)
@@ -868,28 +885,18 @@ function NewProjectPage() {
               <span className="h-px flex-1 dark:bg-white bg-black"></span>
             </span>
             <div>
-              {
-                session?.user?.role === 'tecnico' ? (
-                  <>
-                    <div className='flex gap-3'>
-                      <Button isDisabled variant='flat' color="warning" className='mb-3'>
-                        Agregar Acuerdo
-                      </Button>
-                      <Button isDisabled variant='flat' color="danger" className='mb-3'>
-                        Eliminar Acuerdo
-                      </Button>
-                    </div>
-                  </>
-                ) :
-                  <>
-                    <div className='flex gap-3'>
-                      <ModalAgregarAcuerdos agregarAcuerdo={agregarAcuerdo} />
-                      <Button variant='flat' color='danger' onClick={eliminarAcuerdos}>
-                        Eliminar acuerdos
-                      </Button>
-                    </div>
-                  </>
-              }
+              <div className='flex gap-3'>
+                { 
+                  session?.user?.role === 'tecnico' ? (
+                    <ModalAgregarAcuerdoOpe agregarAcuerdo={agregarAcuerdo}/>
+                  ) : (
+                    <ModalAgregarAcuerdosAdmin agregarAcuerdo={agregarAcuerdo} />
+                  )
+                }
+                <Button variant='flat' color='danger' onClick={eliminarAcuerdos}>
+                  Eliminar acuerdos
+                </Button>
+              </div>
               <TablaAcuerdos acuerdos={acuerdos} eliminarAcuerdos={eliminarAcuerdos} />
             </div>
             {

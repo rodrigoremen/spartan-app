@@ -1,20 +1,17 @@
 import React, { useState } from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input, Textarea } from "@nextui-org/react";
+import { DateInput ,Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input, Textarea } from "@nextui-org/react";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import { DateValue, parseDate } from "@internationalized/date";
 
-function ModalAgregarAcuerdos({ agregarAcuerdo }: { agregarAcuerdo: any }) {
+function ModalAgregarAcuerdosAdmin({ agregarAcuerdo }: { agregarAcuerdo: any }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [objetivo, setObjetivo] = useState("");
-    const [estado, setEstado] = useState("");
-    const [fechaEntrega, setFechaEntrega] = useState("");
-    const [responsable, setResponsable] = useState("");
-    const [observaciones, setObservaciones] = useState("");
-
+    const [fechaEntrega, setFechaEntrega] = useState<DateValue>(parseDate("2024-04-04"));
     const handleSubmit = () => {
-        agregarAcuerdo({ objetivo, estado, fechaEntrega, responsable, observaciones });
+        const fechaEntregaISO = fechaEntrega.toString();
+        agregarAcuerdo({ objetivo, fechaEntrega: fechaEntregaISO });
         onOpenChange();
     };
-
     return (
         <>
             <Button className="mb-3" onPress={onOpen} color="warning" variant="flat">Agregar acuerdo anterior</Button>
@@ -38,41 +35,18 @@ function ModalAgregarAcuerdos({ agregarAcuerdo }: { agregarAcuerdo: any }) {
                                         value={objetivo}
                                         onChange={(e) => setObjetivo(e.target.value)}
                                     />
-                                    <Input
-                                        label="Estado"
-                                        isRequired
-                                        type="text"
-                                        value={estado}
-                                        onChange={(e) => setEstado(e.target.value)}
-
-                                    />
                                 </div>
                                 <div className="flex py-2 px-1 gap-x-2">
-                                    <Input
+                                    <DateInput
                                         isRequired
-                                        type="text"
                                         label="Fecha de entrega"
                                         value={fechaEntrega}
-                                        onChange={(e) => setFechaEntrega(e.target.value)}
+                                        onChange={(e) => setFechaEntrega(e)}
                                         startContent={
                                             <CalendarIcon className="w-5 h-5 text-default-400" />
                                         }
                                     />
-                                    <Input
-                                        isRequired
-                                        type="text"
-                                        label="Responsable"
-                                        value={responsable}
-                                        onChange={(e) => setResponsable(e.target.value)}
-                                    />
                                 </div>
-                                <Textarea
-                                    isRequired
-                                    type="text"
-                                    label="Observaciones"
-                                    value={observaciones}
-                                    onChange={(e) => setObservaciones(e.target.value)}
-                                />
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="flat" onPress={onClose}>
@@ -90,4 +64,4 @@ function ModalAgregarAcuerdos({ agregarAcuerdo }: { agregarAcuerdo: any }) {
     )
 }
 
-export default ModalAgregarAcuerdos
+export default ModalAgregarAcuerdosAdmin

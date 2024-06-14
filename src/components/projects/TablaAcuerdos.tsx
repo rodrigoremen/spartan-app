@@ -2,11 +2,13 @@ import React from 'react'
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 
 interface TablaAcuerdosProps {
-    acuerdos: any[]; 
+    acuerdos: any[];
     eliminarAcuerdos: () => void;
-  }
+}
 
 function TablaAcuerdos({ acuerdos, eliminarAcuerdos }: TablaAcuerdosProps) {
+    const formatter = new Intl.DateTimeFormat('es-ES', { dateStyle: 'full' });
+
     return (
         <Table aria-label="Example empty table">
             <TableHeader>
@@ -21,14 +23,18 @@ function TablaAcuerdos({ acuerdos, eliminarAcuerdos }: TablaAcuerdosProps) {
                     <TableRow key={index}>
                         <TableCell>{acuerdo.objetivo}</TableCell>
                         <TableCell>{acuerdo.estado}</TableCell>
-                        <TableCell>{acuerdo.fechaEntrega}</TableCell>
+                        <TableCell>
+                            {acuerdo.fechaEntrega 
+                                ? formatter.format(new Date(acuerdo.fechaEntrega)) 
+                                : "--"}
+                        </TableCell>
                         <TableCell>{acuerdo.responsable}</TableCell>
                         <TableCell>{acuerdo.observaciones}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>
         </Table>
-    )
+    );
 }
 
-export default TablaAcuerdos
+export default TablaAcuerdos;

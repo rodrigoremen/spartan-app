@@ -102,7 +102,7 @@ function NewProjectPage() {
     setProblemas([]);
   }
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit1 = handleSubmit(async (data) => {
     const acuerdosConFechaISO = acuerdos.map(acuerdo => {
       let fechaEntregaISO = acuerdo.fechaEntrega;
       if (fechaEntregaISO && typeof fechaEntregaISO !== 'string') {
@@ -204,7 +204,7 @@ function NewProjectPage() {
       </Breadcrumbs>
       <Container height="100%" className=' mt-8  mb-4'>
         <Card className=' p-5'>
-          <form onSubmit={onSubmit} className='flex flex-col gap-y-4'>
+          <form onSubmit={onSubmit1} className='flex flex-col gap-y-4'>
             <Heading>
               {params.projectid ? 'Actualizar proyecto' : 'Nuevo proyecto'}
             </Heading>
@@ -886,18 +886,21 @@ function NewProjectPage() {
             </span>
             <div>
               <div className='flex gap-3'>
-                { 
+                {
                   session?.user?.role === 'tecnico' ? (
-                    <ModalAgregarAcuerdoOpe agregarAcuerdo={agregarAcuerdo}/>
+                    null
                   ) : (
-                    <ModalAgregarAcuerdosAdmin agregarAcuerdo={agregarAcuerdo} />
+                    <>
+                      <ModalAgregarAcuerdosAdmin agregarAcuerdo={agregarAcuerdo} />
+                      <Button variant='flat' color='danger' onClick={eliminarAcuerdos}>
+                        Eliminar acuerdos
+                      </Button>
+                    </>
                   )
                 }
-                <Button variant='flat' color='danger' onClick={eliminarAcuerdos}>
-                  Eliminar acuerdos
-                </Button>
+
               </div>
-              <TablaAcuerdos acuerdos={acuerdos} eliminarAcuerdos={eliminarAcuerdos} />
+              <TablaAcuerdos id={params.projectid} acuerdos={acuerdos} eliminarAcuerdos={eliminarAcuerdos} />
             </div>
             {
               session?.user?.role === 'tecnico' ? (

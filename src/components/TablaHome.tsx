@@ -49,9 +49,12 @@ function ProjectsTable({ projects }: any) {
             <TableRow key={index}>
               <TableCell>{project.folio}</TableCell>
               <TableCell>{project.proyecto}</TableCell>
-              <TableCell>{project.fechaEntrega.toLocaleDateString()}</TableCell>
-              <TableCell>{project.acuerdos[0]?.fechaEntrega ? formatter.format(new Date(project.acuerdos[0]?.fechaEntrega))
-                : "--"}</TableCell>
+              <TableCell>
+                {project.fechaEntrega ? formatter.format(new Date(project.fechaEntrega)): "--"}
+              </TableCell>
+              <TableCell>
+                {project.acuerdos[0]?.fechaEntrega ? formatter.format(new Date(project.acuerdos[0]?.fechaEntrega)): "--"}
+              </TableCell>
               <TableCell>
                 <Chip className="capitalize" color="warning" size="sm" variant="flat">
                   {project.avanceProduccion}%

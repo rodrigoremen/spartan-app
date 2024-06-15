@@ -28,7 +28,7 @@ model Project {
   folio             String             @unique
   cliente           String
   proyecto          String
-  fechaEntrega      DateTime
+  fechaEntrega      String
   email             String
   telefono          String
   elaborado         String

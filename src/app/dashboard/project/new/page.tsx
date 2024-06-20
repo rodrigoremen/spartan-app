@@ -79,10 +79,6 @@ function NewProjectPage() {
     setAcuerdos((prevAcuerdos: any[]) => [...prevAcuerdos, acuerdo]);
   };
 
-  const eliminarAcuerdos = () => {
-    setAcuerdos([]);
-  };
-
   const [conceptos, setConceptos] = React.useState<any[]>([]);
   const agregarConcepto = (concepto: any) => {
     setConceptos((prevConceptos: any[]) => [...prevConceptos, concepto]);
@@ -171,14 +167,19 @@ function NewProjectPage() {
   });
 
   const handleDelete = async (projectid: string) => {
-    console.log(projectid);
-    const resp = await axios.delete(`/api/projects/${projectid}`);
-    if (resp.status === 200) {
-      toast.success('Proyecto eliminado correctamente');
+    try {
+      console.log(projectid);
+      const resp = await axios.delete(`/api/projects/${projectid}`);
+      if (resp.status === 200) {
+        toast.success('Proyecto eliminado correctamente');
+      }
+      router.push('/dashboard');
+      router.refresh();
+      console.log(resp);
+    } catch (error) {
+      console.error('Error al eliminar el proyecto:', error);
+      toast.error('Error al eliminar el proyecto');
     }
-    router.push('/dashboard');
-    router.refresh();
-    console.log(resp);
   };
   useEffect(() => {
     if (params.projectid) {
@@ -190,7 +191,7 @@ function NewProjectPage() {
           if (project.fechaEntrega) {
             const date = new Date(project.fechaEntrega);
             fechaEntrega = new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
-          }          setValue('revision', project.revision + 1);
+          } setValue('revision', project.revision + 1);
           setValue('folio', project.folio);
           setValue('cliente', project.cliente);
           setValue('proyecto', project.proyecto);
@@ -204,7 +205,7 @@ function NewProjectPage() {
           setValue('nota', project.nota);
           setValue('incluye', project.incluye);
           setValue('formaPago', project.formaPago);
-          setValue('fechaEntrega', fechaEntrega || parseDate("2024-01-01") );
+          setValue('fechaEntrega', fechaEntrega || parseDate("2024-01-01"));
           setServicios(project.servicios || []);
           setValue('normas', project.normas);
           setValue('avanceFinanciero', project.avanceFinanciero);
@@ -388,12 +389,12 @@ function NewProjectPage() {
                 control={control}
                 render={({ field }) => (
                   <DatePicker
-                  {...field}
-                  isDisabled
-                  className="w-full"
-                  label="Fecha de entrega"
-                  value={field.value}
-                  onChange={(date) => field.onChange(date)}
+                    {...field}
+                    isDisabled
+                    className="w-full"
+                    label="Fecha de entrega"
+                    value={field.value}
+                    onChange={(date) => field.onChange(date)}
                   />
                 )}
               />
@@ -910,20 +911,13 @@ function NewProjectPage() {
                     <ModalAgregarAcuerdosAdmin
                       agregarAcuerdo={agregarAcuerdo}
                     />
-                    <Button
-                      variant="flat"
-                      color="danger"
-                      onClick={eliminarAcuerdos}
-                    >
-                      Eliminar acuerdos
-                    </Button>
                   </>
                 )}
               </div>
               <TablaAcuerdos
                 id={params.projectid}
                 acuerdos={acuerdos}
-                eliminarAcuerdos={eliminarAcuerdos}
+
               />
             </div>
             {session?.user?.role === 'tecnico' ? (

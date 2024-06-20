@@ -48,3 +48,24 @@ export async function GET(
 	}
 }
 
+export async function DELETE(
+	req: Request,
+	{ params }: { params: { id: string } }
+) {
+	const data = await req.json();
+	console.log('Data received:', data);
+	try {
+		const acuerdoDelete = await prisma.acuerdos.delete({
+			where: {
+				id: parseInt(data.id),
+			},
+		});
+		return NextResponse.json(acuerdoDelete);
+	} catch (error) {
+		console.error('Error deleting acuerdos', error);
+		return NextResponse.json(
+			{ error: 'Error deleting acuerdos' },
+			{ status: 500 }
+		);
+	}
+}

@@ -10,16 +10,16 @@ import {
 } from '@nextui-org/react';
 import ModalAgregarRespObs from './ModalAgregarRespObs';
 import { useSession } from 'next-auth/react';
-import { Pencil2Icon } from '@radix-ui/react-icons';
+import { Pencil2Icon, TrashIcon } from '@radix-ui/react-icons';
 import axios from 'axios';
+import { toast } from 'sonner';
 
 interface TablaAcuerdosProps {
 	acuerdos: any[];
-    eliminarAcuerdos: () => void;
 	id: string;
 }
 
-function TablaAcuerdos({ acuerdos: initialAcuerdos, eliminarAcuerdos, id }: TablaAcuerdosProps) {
+function TablaAcuerdos({ acuerdos: initialAcuerdos, id }: TablaAcuerdosProps) {
     const { data: session } = useSession();
     const [acuerdos, setAcuerdos] = useState(initialAcuerdos || []);
 
@@ -33,6 +33,21 @@ function TablaAcuerdos({ acuerdos: initialAcuerdos, eliminarAcuerdos, id }: Tabl
             console.error("Error al cargar los datos", error);
         }
     };
+
+    const eliminarAcuerdo = async (id: string) => {
+        try {
+            console.log("Eliminando acuerdo", id);
+            const resp = await axios.delete(`/api/projects/${id}/acuerdos/`, { data: { id } });
+            if (resp.status === 200) {
+                toast.success("Acuerdo eliminado correctamente");
+            }
+            console.log(resp);
+            cargarDatos();
+        } catch (error) {
+            toast.error("Error al eliminar el acuerdo");
+            console.error("Error al eliminar el acuerdo", error);
+        }
+    }
 
     useEffect(() => {
         cargarDatos();
@@ -61,7 +76,7 @@ function TablaAcuerdos({ acuerdos: initialAcuerdos, eliminarAcuerdos, id }: Tabl
                         </TableCell>
                         <TableCell>{acuerdo.responsable}</TableCell>
                         <TableCell>{acuerdo.observaciones}</TableCell>
-                        <TableCell>
+                        <TableCell className='flex gap-3'>
                             {session?.user?.role === 'tecnico' ? (
                                 <ModalAgregarRespObs id={acuerdo.id} cargarDatos={cargarDatos} />
                             ) : (
@@ -75,6 +90,15 @@ function TablaAcuerdos({ acuerdos: initialAcuerdos, eliminarAcuerdos, id }: Tabl
                                     <Pencil2Icon />
                                 </Button>
                             )}
+                            <Button
+                                isIconOnly
+                                className="text-lg flex justify-center cursor-pointer active:opacity-50"
+                                color="danger"
+                                variant="flat"
+                                onClick={() => eliminarAcuerdo(acuerdo.id)}
+                            >
+                                <TrashIcon />
+                            </Button>
                         </TableCell>
                     </TableRow>
                 ))}

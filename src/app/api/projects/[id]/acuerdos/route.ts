@@ -1,14 +1,36 @@
 import prisma from '@/libs/prisma';
 import { NextResponse } from 'next/server';
 
-export async function PUT(
+export async function POST(
 	req: Request,
 	{ params }: { params: { id: string } }
 ) {
 	const data = await req.json();
 	console.log('Data received:', data);
-    console.log('Params:', params.id);
+	console.log('Params:', params.id);
 	try {
+		const acuerdo = await prisma.acuerdos.create({
+			data: {
+				objetivo: data.objetivo,
+				fechaEntrega: data.fechaEntrega,
+				estado: 'pendiente',
+				projectId: parseInt(params.id),
+			},
+		});
+		return NextResponse.json(acuerdo);
+	} catch (error) {
+		console.error('Error creating acuerdos', error);
+		return NextResponse.json(
+			{ error: 'Error creating acuerdos' },
+			{ status: 500 }
+		);
+	}
+}
+export async function PUT(
+	req: Request,
+	{ params }: { params: { id: string } }
+) {
+	const data = await req.json();	try {
 		const acuerdo = await prisma.acuerdos.update({
 			where: {
 				id: parseInt(params.id),
@@ -27,7 +49,6 @@ export async function PUT(
 		);
 	}
 }
-
 export async function GET(
 	req: Request,
 	{ params }: { params: { id: string } }
@@ -50,10 +71,8 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { id: string } }
 ) {
 	const data = await req.json();
-	console.log('Data received:', data);
 	try {
 		const acuerdoDelete = await prisma.acuerdos.delete({
 			where: {

@@ -75,9 +75,6 @@ function NewProjectPage() {
   };
 
   const [acuerdos, setAcuerdos] = React.useState<any[]>([]);
-  const agregarAcuerdo = (acuerdo: any) => {
-    setAcuerdos((prevAcuerdos: any[]) => [...prevAcuerdos, acuerdo]);
-  };
 
   const [conceptos, setConceptos] = React.useState<any[]>([]);
   const agregarConcepto = (concepto: any) => {
@@ -105,12 +102,9 @@ function NewProjectPage() {
   const eliminarProblemas = () => {
     setProblemas([]);
   };
-
   const onSubmit1 = handleSubmit(async (data) => {
     const timeZone = getLocalTimeZone();
-
     const fechaEntregaISO = data.fechaEntrega.toDate(timeZone).toISOString();
-
     const acuerdosConFechaISO = acuerdos.map((acuerdo) => {
       let fechaEntregaISO = acuerdo.fechaEntrega;
       if (fechaEntregaISO && typeof fechaEntregaISO !== 'string') {
@@ -165,7 +159,14 @@ function NewProjectPage() {
       }
     }
   });
-
+  const cargarDatos = async () => {
+    try {
+      const response = await axios.get(`/api/projects/${params.projectid}/acuerdos`);
+      setAcuerdos(response.data);
+    } catch (error) {
+      console.error("Error al cargar los datos", error);
+    }
+  };
   const handleDelete = async (projectid: string) => {
     try {
       console.log(projectid);
@@ -182,6 +183,7 @@ function NewProjectPage() {
     }
   };
   useEffect(() => {
+    cargarDatos();
     if (params.projectid) {
       axios
         .get(`/api/projects/${params.projectid}`)
@@ -209,7 +211,6 @@ function NewProjectPage() {
           setServicios(project.servicios || []);
           setValue('normas', project.normas);
           setValue('avanceFinanciero', project.avanceFinanciero);
-          setAcuerdos(project.acuerdos || []);
           setValue('situacionGeneral', project.situacionGeneral);
           setConceptos(project.conceptos || []);
           setActividades(project.actividades || []);
@@ -904,22 +905,16 @@ function NewProjectPage() {
               <span className="shrink-0 px-6">Acuerdos anteriores</span>
               <span className="h-px flex-1 dark:bg-white bg-black"></span>
             </span>
-            <div>
-              <div className="flex gap-3">
-                {session?.user?.role === 'tecnico' ? null : (
-                  <>
-                    <ModalAgregarAcuerdosAdmin
-                      agregarAcuerdo={agregarAcuerdo}
-                    />
-                  </>
-                )}
-              </div>
-              <TablaAcuerdos
-                id={params.projectid}
-                acuerdos={acuerdos}
 
-              />
+            <div className="gap-3">
+              {session?.user?.role === 'tecnico' ? null : (
+                <>
+                  <ModalAgregarAcuerdosAdmin id={params.projectid} cargarDatos={cargarDatos} />
+                </>
+              )}
+              <TablaAcuerdos id={params.projectid} acuerdos={acuerdos} cargarDatos={cargarDatos} />
             </div>
+
             {session?.user?.role === 'tecnico' ? (
               <>
                 <span className="flex items-center">

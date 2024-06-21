@@ -15,45 +15,30 @@ import axios from 'axios';
 import { toast } from 'sonner';
 
 interface TablaAcuerdosProps {
-	acuerdos: any[];
-	id: string;
+    acuerdos: any[];
+    id: string;
+    cargarDatos: () => void;
 }
 
-function TablaAcuerdos({ acuerdos: initialAcuerdos, id }: TablaAcuerdosProps) {
+function TablaAcuerdos({ acuerdos: initialAcuerdos, id, cargarDatos }: TablaAcuerdosProps) {
     const { data: session } = useSession();
     const [acuerdos, setAcuerdos] = useState(initialAcuerdos || []);
-
     const formatter = new Intl.DateTimeFormat('es-ES', { dateStyle: 'full' });
-
-    const cargarDatos = async () => {
+    useEffect(() => {
+        setAcuerdos(initialAcuerdos);
+    }, [initialAcuerdos]);
+    const eliminarAcuerdo = async (acuerdoId: string) => {
         try {
-            const response = await axios.get(`/api/projects/${id}/acuerdos`); 
-            setAcuerdos(response.data);
-        } catch (error) {
-            console.error("Error al cargar los datos", error);
-        }
-    };
-
-    const eliminarAcuerdo = async (id: string) => {
-        try {
-            console.log("Eliminando acuerdo", id);
-            const resp = await axios.delete(`/api/projects/${id}/acuerdos/`, { data: { id } });
+            const resp = await axios.delete(`/api/projects/${id}/acuerdos/` , { data: { id: acuerdoId } });
             if (resp.status === 200) {
                 toast.success("Acuerdo eliminado correctamente");
+                cargarDatos(); 
             }
-            console.log(resp);
-            cargarDatos();
         } catch (error) {
             toast.error("Error al eliminar el acuerdo");
             console.error("Error al eliminar el acuerdo", error);
         }
     }
-
-    useEffect(() => {
-        cargarDatos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     return (
         <Table aria-label="Example empty table">
             <TableHeader>

@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect } from 'react';
-import ModalAgregarServicio from '@/components/ModalAgregarServicio';
-import TablaServicios from '@/components/TablaServicios';
+import ModalAgregarServicio from '@/components/projects/ModalAgregarServicio';
+import TablaServicios from '@/components/projects/TablaServicios';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import {
@@ -620,28 +620,7 @@ function NewProjectPage() {
               <span className="h-px flex-1 dark:bg-white bg-black"></span>
             </span>
             <div className="">
-              {session?.user?.role === 'tecnico' ? (
-                <>
-                  <div className="flex gap-3">
-                    <Button
-                      isDisabled
-                      variant="flat"
-                      color="warning"
-                      className="mb-3"
-                    >
-                      Agregar servicio
-                    </Button>
-                    <Button
-                      isDisabled
-                      variant="flat"
-                      color="danger"
-                      className="mb-3"
-                    >
-                      Eliminar servicio
-                    </Button>
-                  </div>
-                </>
-              ) : (
+              {session?.user?.role === 'tecnico' ? null : (
                 <>
                   <div className="flex gap-3">
                     <ModalAgregarServicio agregarServicio={agregarServicio} />

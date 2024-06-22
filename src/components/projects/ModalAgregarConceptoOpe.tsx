@@ -45,7 +45,7 @@ function ModalAgregarConceptoOpe({ id, cargarDatosConceptos }: { id: string, car
 
     return (
         <>
-            <Tooltip content="Agregar responsable y observaciones">
+            <Tooltip content="Agregar información a los conceptos">
                 <Button
                     isIconOnly
                     className="text-lg flex justify-center cursor-pointer active:opacity-50"

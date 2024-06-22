@@ -2,7 +2,7 @@ import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader
 import { Pencil2Icon } from '@radix-ui/react-icons';
 import { Text } from '@radix-ui/themes';
 import axios from 'axios';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -16,9 +16,9 @@ function ModalAgregarRespObs({ id, cargarDatos }: { id: string, cargarDatos: () 
             observaciones: ""
         }
     });
-
     const onSubmitAcuerdos = handleSubmit(async (data) => {
         try {
+            console.log(id)
             const resp = await axios.put(`/api/projects/${id}/acuerdos`, data);
             console.log(resp.data);
             if (resp.status === 200) {
@@ -32,7 +32,6 @@ function ModalAgregarRespObs({ id, cargarDatos }: { id: string, cargarDatos: () 
         }
         onOpenChange();
     });
-
     return (
         <>
             <Tooltip content="Agregar responsable y observaciones">

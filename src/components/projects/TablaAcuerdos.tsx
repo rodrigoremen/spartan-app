@@ -7,6 +7,7 @@ import {
     TableRow,
     TableCell,
     Button,
+    Tooltip,
 } from '@nextui-org/react';
 import ModalAgregarRespObs from './ModalAgregarRespObs';
 import { useSession } from 'next-auth/react';
@@ -29,10 +30,10 @@ function TablaAcuerdos({ acuerdos: initialAcuerdos, id, cargarDatos }: TablaAcue
     }, [initialAcuerdos]);
     const eliminarAcuerdo = async (acuerdoId: string) => {
         try {
-            const resp = await axios.delete(`/api/projects/${id}/acuerdos/` , { data: { id: acuerdoId } });
+            const resp = await axios.delete(`/api/projects/${id}/acuerdos/`, { data: { id: acuerdoId } });
             if (resp.status === 200) {
                 toast.success("Acuerdo eliminado correctamente");
-                cargarDatos(); 
+                cargarDatos();
             }
         } catch (error) {
             toast.error("Error al eliminar el acuerdo");
@@ -75,15 +76,17 @@ function TablaAcuerdos({ acuerdos: initialAcuerdos, id, cargarDatos }: TablaAcue
                                     <Pencil2Icon />
                                 </Button>
                             )}
-                            <Button
-                                isIconOnly
-                                className="text-lg flex justify-center cursor-pointer active:opacity-50"
-                                color="danger"
-                                variant="flat"
-                                onClick={() => eliminarAcuerdo(acuerdo.id)}
-                            >
-                                <TrashIcon />
-                            </Button>
+                            <Tooltip content="Eliminar acuerdo">
+                                <Button
+                                    isIconOnly
+                                    className="text-lg flex justify-center cursor-pointer active:opacity-50"
+                                    color="danger"
+                                    variant="flat"
+                                    onClick={() => eliminarAcuerdo(acuerdo.id)}
+                                >
+                                    <TrashIcon />
+                                </Button>
+                            </Tooltip>
                         </TableCell>
                     </TableRow>
                 ))}

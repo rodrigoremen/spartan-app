@@ -2,9 +2,9 @@ import React from 'react'
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 
 interface TablaActividadesProps {
-    actividades: any[]; 
+    actividades: any[];
     eliminarActividades: () => void;
-  }
+}
 
 function TablaActividades({ actividades, eliminarActividades }: TablaActividadesProps) {
     return (

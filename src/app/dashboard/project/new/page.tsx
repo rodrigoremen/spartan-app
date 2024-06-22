@@ -391,7 +391,7 @@ function NewProjectPage() {
                 render={({ field }) => (
                   <DatePicker
                     {...field}
-                    isDisabled
+                    isReadOnly
                     className="w-full"
                     label="Fecha de entrega"
                     value={field.value}
@@ -914,14 +914,13 @@ function NewProjectPage() {
               )}
               <TablaAcuerdos id={params.projectid} acuerdos={acuerdos} cargarDatos={cargarDatos} />
             </div>
-
+            <span className="flex items-center">
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+              <span className="shrink-0 px-6">Avances del proyecto</span>
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+            </span>
             {session?.user?.role === 'tecnico' ? (
               <>
-                <span className="flex items-center">
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                  <span className="shrink-0 px-6">Avances del proyecto</span>
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                </span>
                 <div className="flex justify-between">
                   <Button
                     color="warning"
@@ -1028,7 +1027,126 @@ function NewProjectPage() {
                   />
                 </div>
               </>
-            ) : null}
+            ) : (
+              <>
+                <div className="flex justify-between">
+                  <Button
+                    color="warning"
+                    variant="flat"
+                    onClick={() =>
+                      router.push(
+                        `/dashboard/project/avance/produccion/${params.projectid}`
+                      )
+                    }
+                  >
+                    Avance de producción
+                  </Button>
+                  <Button
+                    color="warning"
+                    variant="flat"
+                    onClick={() =>
+                      router.push(
+                        `/dashboard/project/avance/instalacion/${params.projectid}`
+                      )
+                    }
+                  >
+                    Avance de instalación
+                  </Button>
+                </div>
+                <Controller
+                  name="situacionGeneral"
+                  control={control}
+                  render={({ field }) => {
+                    return (
+                      <Input
+                        {...field}
+                        isRequired
+                        isReadOnly
+                        type="text"
+                        label="Situación general"
+                      />
+                    );
+                  }}
+                />
+                <span className="flex items-center">
+                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                  <span className="shrink-0 px-6">Estatus de conceptos</span>
+                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                </span>
+                <div>
+                  <div className="flex gap-3">
+                    <ModalAgregarConcepto agregarConcepto={agregarConcepto} />
+                    <Button
+                      color="danger"
+                      variant="flat"
+                      onClick={eliminarConceptos}
+                    >
+                      Eliminar conceptos
+                    </Button>
+                  </div>
+                  <TablaConceptos
+                    conceptos={conceptos}
+                    eliminarConceptos={eliminarConceptos}
+                  />
+                </div>
+                <span className="flex items-center">
+                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                  <span className="shrink-0 px-6">
+                    Actividades relevantes del periodo
+                  </span>
+                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                </span>
+                <div>
+                  <div className="flex gap-3">
+                    <Button
+                      isDisabled
+                      color="warning"
+                      variant="flat"
+                    >
+                      Agregar actividades
+                    </Button>
+                    <Button
+                      isDisabled
+                      color="danger"
+                      variant="flat"
+                    >
+                      Eliminar actividades
+                    </Button>
+                  </div>
+                  <TablaActividades
+                    actividades={actividades}
+                    eliminarActividades={eliminarActividades}
+                  />
+                </div>
+                <span className="flex items-center">
+                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                  <span className="shrink-0 px-6">Problemas</span>
+                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
+                </span>
+                <div>
+                  <div className="flex gap-3">
+                    <Button
+                      isDisabled
+                      color="warning"
+                      variant="flat"
+                    >
+                      Agregar problemas
+                    </Button>
+                    <Button
+                      color="danger"
+                      variant="flat"
+                      isDisabled
+                    >
+                      Eliminar problemas
+                    </Button>
+                  </div>
+                  <TablaProblema
+                    problemas={problemas}
+                    eliminarProblemas={eliminarProblemas}
+                  />
+                </div>
+              </>
+            )}
             <Button
               type="submit"
               variant="flat"

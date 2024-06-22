@@ -83,10 +83,10 @@ model Acuerdos {
 model Conceptos {
   id            Int      @id @default(autoincrement())
   concepto      String
-  status        String
-  tecnico       String
-  avance        Int
-  fechaEstimada String
+  status        String?
+  tecnico       String?
+  avance        Int?
+  fechaEstimada String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   projectId     Int

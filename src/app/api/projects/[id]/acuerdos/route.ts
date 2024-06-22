@@ -30,7 +30,8 @@ export async function PUT(
 	req: Request,
 	{ params }: { params: { id: string } }
 ) {
-	const data = await req.json();	try {
+	const data = await req.json();	
+	try {
 		const acuerdo = await prisma.acuerdos.update({
 			where: {
 				id: parseInt(params.id),
@@ -70,7 +71,7 @@ export async function GET(
 }
 
 export async function DELETE(
-	req: Request,
+	req: Request
 ) {
 	const data = await req.json();
 	try {

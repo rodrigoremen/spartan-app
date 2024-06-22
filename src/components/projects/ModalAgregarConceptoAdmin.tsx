@@ -1,15 +1,23 @@
 import React, { useState } from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Input, Textarea } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Textarea } from "@nextui-org/react";
+import axios from 'axios';
+import { toast } from 'sonner';
 
-
-function ModalAgregarAcuerdoOpe({ agregarAcuerdo }: { agregarAcuerdo: any }) {
+function ModalAgregarConceptoAdmin({ id, cargarDatosConceptos }: { id: string, cargarDatosConceptos: () => void }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [responsable, setResponsable] = useState("");
-    const [observaciones, setObservaciones] = useState("");
-    const handleSubmit = () => {
-        
-        agregarAcuerdo({ responsable, observaciones});
-        onOpenChange();
+    const [concepto, setConceptos] = useState("");
+    const handleSubmit = async () => {
+        try {
+            const response = await axios.post(`/api/projects/${id}/conceptos`, { concepto });
+            if (response.status === 200) {
+                toast.success('Concepto agregado correctamente');
+                cargarDatosConceptos(); 
+                onOpenChange();
+            }
+        } catch (error) {
+            toast.error('Error al agregar el concepto');
+            console.error('Error al agregar el concepto:', error);
+        }
     };
     return (
         <>
@@ -23,25 +31,16 @@ function ModalAgregarAcuerdoOpe({ agregarAcuerdo }: { agregarAcuerdo: any }) {
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Agrega un cuerdo anterior</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Agrega un acuerdo anterior</ModalHeader>
                             <ModalBody>
                                 <div className="flex gap-x-3">
                                     <Textarea
+                                        autoFocus
                                         type="text"
-                                        label="Objetivo"
+                                        label="Concepto"
                                         isRequired
-                                        value={observaciones}
-                                        onChange={(e) => setObservaciones(e.target.value)}
-                                    />
-                                </div>
-                                <div className="flex py-2 px-1 gap-x-2">
-                                    <Input
-                                    autoFocus
-                                    type="text"
-                                    label="Responsable"
-                                    isRequired
-                                    value={responsable}
-                                    onChange={(e) => setResponsable(e.target.value)}
+                                        value={concepto}
+                                        onChange={(e) => setConceptos(e.target.value)}
                                     />
                                 </div>
                             </ModalBody>
@@ -58,7 +57,7 @@ function ModalAgregarAcuerdoOpe({ agregarAcuerdo }: { agregarAcuerdo: any }) {
                 </ModalContent>
             </Modal>
         </>
-    )
+    );
 }
 
-export default ModalAgregarAcuerdoOpe
+export default ModalAgregarConceptoAdmin;

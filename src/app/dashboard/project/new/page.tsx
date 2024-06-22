@@ -19,13 +19,11 @@ import {
   MobileIcon,
   TrashIcon,
   Pencil2Icon,
-  CalendarIcon,
 } from '@radix-ui/react-icons';
 import { useForm, Controller } from 'react-hook-form';
 import { useRouter, useParams } from 'next/navigation';
 import { toast } from 'sonner';
 import TablaAcuerdos from '@/components/projects/TablaAcuerdos';
-import ModalAgregarConcepto from '@/components/projects/ModalAgregarConcepto';
 import TablaConceptos from '@/components/projects/TablaConceptos';
 import ModalAgregarActividades from '@/components/projects/ModalAgregarActividades';
 import TablaActividades from '@/components/projects/TablaActividades';
@@ -33,6 +31,7 @@ import ModalAgregarProblema from '@/components/projects/ModalAgregarProblema';
 import TablaProblema from '@/components/projects/TablaProblema';
 import ModalAgregarAcuerdosAdmin from '@/components/projects/ModalAgregarAcuerdosAdmin';
 import { CalendarDate, getLocalTimeZone, parseDate } from '@internationalized/date';
+import ModalAgregarConceptoAdmin from '@/components/projects/ModalAgregarConceptoAdmin';
 
 function NewProjectPage() {
   const { control, handleSubmit, setValue } = useForm({
@@ -77,13 +76,6 @@ function NewProjectPage() {
   const [acuerdos, setAcuerdos] = React.useState<any[]>([]);
 
   const [conceptos, setConceptos] = React.useState<any[]>([]);
-  const agregarConcepto = (concepto: any) => {
-    setConceptos((prevConceptos: any[]) => [...prevConceptos, concepto]);
-  };
-
-  const eliminarConceptos = () => {
-    setConceptos([]);
-  };
 
   const [actividades, setActividades] = React.useState<any[]>([]);
   const agregarActividad = (actividad: any) => {
@@ -163,6 +155,14 @@ function NewProjectPage() {
     try {
       const response = await axios.get(`/api/projects/${params.projectid}/acuerdos`);
       setAcuerdos(response.data);
+    } catch (error) {
+      console.error("Error al cargar los datos", error);
+    }
+  };
+  const cargarDatosConceptos = async () => {
+    try {
+      const response = await axios.get(`/api/projects/${params.projectid}/conceptos`);
+      setConceptos(response.data);
     } catch (error) {
       console.error("Error al cargar los datos", error);
     }
@@ -919,234 +919,130 @@ function NewProjectPage() {
               <span className="shrink-0 px-6">Avances del proyecto</span>
               <span className="h-px flex-1 dark:bg-white bg-black"></span>
             </span>
+            <div className="flex justify-between">
+              <Button
+                color="warning"
+                variant="flat"
+                onClick={() =>
+                  router.push(
+                    `/dashboard/project/avance/produccion/${params.projectid}`
+                  )
+                }
+              >
+                Avance de producción
+              </Button>
+              <Button
+                color="warning"
+                variant="flat"
+                onClick={() =>
+                  router.push(
+                    `/dashboard/project/avance/instalacion/${params.projectid}`
+                  )
+                }
+              >
+                Avance de instalación
+              </Button>
+            </div>
             {session?.user?.role === 'tecnico' ? (
-              <>
-                <div className="flex justify-between">
-                  <Button
-                    color="warning"
-                    variant="flat"
-                    onClick={() =>
-                      router.push(
-                        `/dashboard/project/avance/produccion/${params.projectid}`
-                      )
-                    }
-                  >
-                    Avance de producción
-                  </Button>
-                  <Button
-                    color="warning"
-                    variant="flat"
-                    onClick={() =>
-                      router.push(
-                        `/dashboard/project/avance/instalacion/${params.projectid}`
-                      )
-                    }
-                  >
-                    Avance de instalación
-                  </Button>
-                </div>
-                <Controller
-                  name="situacionGeneral"
-                  control={control}
-                  render={({ field }) => {
-                    return (
-                      <Input
-                        {...field}
-                        isRequired
-                        type="text"
-                        label="Situación general"
-                      />
-                    );
-                  }}
-                />
-                <span className="flex items-center">
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                  <span className="shrink-0 px-6">Estatus de conceptos</span>
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                </span>
-                <div>
-                  <div className="flex gap-3">
-                    <ModalAgregarConcepto agregarConcepto={agregarConcepto} />
-                    <Button
-                      color="danger"
-                      variant="flat"
-                      onClick={eliminarConceptos}
-                    >
-                      Eliminar conceptos
-                    </Button>
-                  </div>
-                  <TablaConceptos
-                    conceptos={conceptos}
-                    eliminarConceptos={eliminarConceptos}
-                  />
-                </div>
-                <span className="flex items-center">
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                  <span className="shrink-0 px-6">
-                    Actividades relevantes del periodo
-                  </span>
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                </span>
-                <div>
-                  <div className="flex gap-3">
-                    <ModalAgregarActividades
-                      agregarActividad={agregarActividad}
+              <Controller
+                name="situacionGeneral"
+                control={control}
+                render={({ field }) => {
+                  return (
+                    <Input
+                      {...field}
+                      isRequired
+                      type="text"
+                      label="Situación general"
                     />
-                    <Button
-                      color="danger"
-                      variant="flat"
-                      onClick={eliminarActividades}
-                    >
-                      Eliminar actividades
-                    </Button>
-                  </div>
-                  <TablaActividades
-                    actividades={actividades}
-                    eliminarActividades={eliminarActividades}
-                  />
-                </div>
-                <span className="flex items-center">
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                  <span className="shrink-0 px-6">Problemas</span>
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                </span>
-                <div>
-                  <div className="flex gap-3">
-                    <ModalAgregarProblema agregarProblema={agregarProblema} />
-                    <Button
-                      color="danger"
-                      variant="flat"
-                      onClick={eliminarProblemas}
-                    >
-                      Eliminar problemas
-                    </Button>
-                  </div>
-                  <TablaProblema
-                    problemas={problemas}
-                    eliminarProblemas={eliminarProblemas}
-                  />
-                </div>
-              </>
+                  );
+                }}
+              />
             ) : (
-              <>
-                <div className="flex justify-between">
-                  <Button
-                    color="warning"
-                    variant="flat"
-                    onClick={() =>
-                      router.push(
-                        `/dashboard/project/avance/produccion/${params.projectid}`
-                      )
-                    }
-                  >
-                    Avance de producción
-                  </Button>
-                  <Button
-                    color="warning"
-                    variant="flat"
-                    onClick={() =>
-                      router.push(
-                        `/dashboard/project/avance/instalacion/${params.projectid}`
-                      )
-                    }
-                  >
-                    Avance de instalación
-                  </Button>
-                </div>
-                <Controller
-                  name="situacionGeneral"
-                  control={control}
-                  render={({ field }) => {
-                    return (
-                      <Input
-                        {...field}
-                        isRequired
-                        isReadOnly
-                        type="text"
-                        label="Situación general"
-                      />
-                    );
-                  }}
-                />
-                <span className="flex items-center">
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                  <span className="shrink-0 px-6">Estatus de conceptos</span>
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                </span>
-                <div>
-                  <div className="flex gap-3">
-                    <ModalAgregarConcepto agregarConcepto={agregarConcepto} />
-                    <Button
-                      color="danger"
-                      variant="flat"
-                      onClick={eliminarConceptos}
-                    >
-                      Eliminar conceptos
-                    </Button>
-                  </div>
-                  <TablaConceptos
-                    conceptos={conceptos}
-                    eliminarConceptos={eliminarConceptos}
-                  />
-                </div>
-                <span className="flex items-center">
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                  <span className="shrink-0 px-6">
-                    Actividades relevantes del periodo
-                  </span>
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                </span>
-                <div>
-                  <div className="flex gap-3">
-                    <Button
-                      isDisabled
-                      color="warning"
-                      variant="flat"
-                    >
-                      Agregar actividades
-                    </Button>
-                    <Button
-                      isDisabled
-                      color="danger"
-                      variant="flat"
-                    >
-                      Eliminar actividades
-                    </Button>
-                  </div>
-                  <TablaActividades
-                    actividades={actividades}
-                    eliminarActividades={eliminarActividades}
-                  />
-                </div>
-                <span className="flex items-center">
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                  <span className="shrink-0 px-6">Problemas</span>
-                  <span className="h-px flex-1 dark:bg-white bg-black"></span>
-                </span>
-                <div>
-                  <div className="flex gap-3">
-                    <Button
-                      isDisabled
-                      color="warning"
-                      variant="flat"
-                    >
-                      Agregar problemas
-                    </Button>
-                    <Button
-                      color="danger"
-                      variant="flat"
-                      isDisabled
-                    >
-                      Eliminar problemas
-                    </Button>
-                  </div>
-                  <TablaProblema
-                    problemas={problemas}
-                    eliminarProblemas={eliminarProblemas}
-                  />
-                </div>
-              </>
+              <Controller
+                name="situacionGeneral"
+                control={control}
+                render={({ field }) => {
+                  return (
+                    <Input
+                      {...field}
+                      isReadOnly
+                      isRequired
+                      type="text"
+                      label="Situación general"
+                    />
+                  );
+                }}
+              />
             )}
+            <span className="flex items-center">
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+              <span className="shrink-0 px-6">Estatus de conceptos</span>
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+            </span>
+            <div>
+              <div className="flex gap-3">
+                {session?.user?.role === 'tecnico' ? null : (
+                  <>
+                    <ModalAgregarConceptoAdmin id={params.projectid} cargarDatosConceptos={cargarDatosConceptos} />
+                  </>
+                )}              </div>
+              <TablaConceptos
+                id={params.projectid}
+                conceptos={conceptos}
+                cargarDatosConceptos={cargarDatosConceptos}
+              />
+            </div>
+            <span className="flex items-center">
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+              <span className="shrink-0 px-6">
+                Actividades relevantes del periodo
+              </span>
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+            </span>
+            <div>
+              {session?.user?.role === 'administrativo' ? null : (
+                <div className="flex gap-3">
+                  <ModalAgregarActividades
+                    agregarActividad={agregarActividad}
+                  />
+                  <Button
+                    color="danger"
+                    variant="flat"
+                    onClick={eliminarActividades}
+                  >
+                    Eliminar actividades
+                  </Button>
+                </div>
+              )}
+              <TablaActividades
+                actividades={actividades}
+                eliminarActividades={eliminarActividades}
+              />
+            </div>
+            <span className="flex items-center">
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+              <span className="shrink-0 px-6">Problemas</span>
+              <span className="h-px flex-1 dark:bg-white bg-black"></span>
+            </span>
+            <div>
+              {session?.user?.role === 'administrativo' ? null : (
+                <div className="flex gap-3">
+                  <ModalAgregarProblema agregarProblema={agregarProblema} />
+                  <Button
+                    color="danger"
+                    variant="flat"
+                    onClick={eliminarProblemas}
+                  >
+                    Eliminar problemas
+                  </Button>
+                </div>
+              )}
+              <TablaProblema
+                problemas={problemas}
+                eliminarProblemas={eliminarProblemas}
+              />
+            </div>
             <Button
               type="submit"
               variant="flat"

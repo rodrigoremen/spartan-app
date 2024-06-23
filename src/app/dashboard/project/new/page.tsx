@@ -50,6 +50,7 @@ function NewProjectPage() {
       nota: '',
       incluye: '',
       formaPago: '',
+      estado: '',
       servicios: [],
       fechaEntrega: parseDate("2024-01-01"),
       normas: '',
@@ -63,6 +64,8 @@ function NewProjectPage() {
   });
   const router = useRouter();
   const params = useParams() as { projectid: string };
+
+  const [estadoAcuerdos, setEstadoAcuerdos] = React.useState(0);
 
   const [servicios, setServicios] = React.useState<any[]>([]);
   const agregarServicio = (servicio: any) => {
@@ -113,6 +116,7 @@ function NewProjectPage() {
         fechaEntrega: fechaEntregaISO,
       };
     });
+    data.estado = estadoAcuerdos.toString();
     const newData = {
       ...data,
       fechaEntrega: fechaEntregaISO,
@@ -235,9 +239,29 @@ function NewProjectPage() {
       <Container height="100%" className=" mt-8  mb-4">
         <Card className=" p-5">
           <form onSubmit={onSubmit1} className="flex flex-col gap-y-4">
+            <div className='flex justify-between'>
             <Heading>
               {params.projectid ? 'Actualizar proyecto' : 'Nuevo proyecto'}
             </Heading>
+            {estadoAcuerdos >= 91 && estadoAcuerdos <= 100 ? (
+              <Button
+                color="success"
+                variant="flat"
+                onClick={() => alert('Proyecto finalizado')}
+              >
+                Descargar PDF
+              </Button>
+            ) : (
+              <Button
+                color="success"
+                variant="flat"
+                onClick={() => alert('Proyecto finalizado')}
+                isDisabled
+              >
+                Descargar PDF
+              </Button>
+            )}
+            </div>
             <div className="flex gap-x-3">
               {session?.user?.role === 'tecnico' ? (
                 <Controller
@@ -891,8 +915,13 @@ function NewProjectPage() {
                   <ModalAgregarAcuerdosAdmin id={params.projectid} cargarDatos={cargarDatos} />
                 </>
               )}
-              <TablaAcuerdos id={params.projectid} acuerdos={acuerdos} cargarDatos={cargarDatos} />
-            </div>
+              <TablaAcuerdos
+                id={params.projectid}
+                acuerdos={acuerdos}
+                cargarDatos={cargarDatos}
+                onEstadoCalculado={setEstadoAcuerdos} 
+              />            
+              </div>
             <span className="flex items-center">
               <span className="h-px flex-1 dark:bg-white bg-black"></span>
               <span className="shrink-0 px-6">Avances del proyecto</span>

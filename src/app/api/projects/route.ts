@@ -33,6 +33,7 @@ export async function POST(request: Request) {
 				formaPago: data.formaPago,
 				avanceFinanciero: parseInt(data.avanceFinanciero),
 				situacionGeneral: data.situacionGeneral,
+				estado: parseInt(data.estado),
 				user: {
 					connect: {
 						id: parseInt(session?.user.id),

@@ -91,6 +91,7 @@ export async function PUT(
 			formaPago: data.formaPago,
 			avanceFinanciero: parseInt(data.avanceFinanciero),
 			situacionGeneral: data.situacionGeneral,
+			estado: parseInt(data.estado),
 			servicios: {
 				deleteMany: [{ projectId: parseInt(params.id) }], // Borra todos los servicios actuales
 				create: serviciosData.map(

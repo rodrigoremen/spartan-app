@@ -82,7 +82,7 @@ function SignUpForm() {
                                 {...field}
                                 fullWidth
                                 aria-label="Options"
-                                variant="bordered"
+                                variant="solid"
                                 color='warning'
                                 size='md'
                                 selectedKey={selectedRole}
@@ -259,7 +259,7 @@ function SignUpForm() {
                     )
 
                 }
-                <Button type="submit" color='warning' className='text-white'>
+                <Button type="submit" color='warning' variant='flat' className='text-white'>
                     Regístrate
                 </Button>
             </Flex>

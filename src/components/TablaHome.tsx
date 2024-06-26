@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 
 function ProjectsTable({ projects }: any) {
   const router = useRouter()
-  console.log(projects)
   const [query, setQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -57,7 +56,7 @@ function ProjectsTable({ projects }: any) {
               </TableCell>
               <TableCell>
                 <Chip className="capitalize" color="warning" size="sm" variant="flat">
-                  {project.avanceProduccion}%
+                  {project.estado}%
                 </Chip>
               </TableCell>
               <TableCell>{project.acuerdos[0]?.responsable || null}</TableCell>

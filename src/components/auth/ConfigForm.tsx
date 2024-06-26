@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 
 function ConfigForm() {
@@ -24,7 +24,6 @@ function ConfigForm() {
 
     const router = useRouter();
     const { data: session } = useSession();
-   
 
     const onSubmit = handleSubmit(async (data) => {
         try {

@@ -123,7 +123,7 @@ function SignInForm() {
                         {errors.password.message}
                     </Text>
                 )}
-                <Button color='warning' className='text-white' type='submit'>
+                <Button color='warning' className='text-white' variant='flat' type='submit'>
                     Iniciar Sesión
                 </Button>
             </Flex>

@@ -117,7 +117,7 @@ function NavBar() {
                                         <p className="font-semibold">Hola!</p>
                                         <p className="font-semibold">{session?.user?.name}</p>
                                     </DropdownItem>
-                                    <DropdownItem key="settings" onClick={() => router.push('../auth/config/')}>Mi configuración</DropdownItem>
+                                    <DropdownItem key="settings" onClick={() => router.push('/auth/config/')}>Mi configuración</DropdownItem>
                                     <DropdownItem key="logout" color="danger" onClick={() => signOut()}>
                                         Cerrar sesión
                                     </DropdownItem>

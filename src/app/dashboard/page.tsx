@@ -10,15 +10,20 @@ async function loadProjects() {
 
 async function DashboardPage() {
   const projects = await loadProjects()
-  console.log(projects)
   return (
-    <Container className='mt-10 px-10'>
+        <Container className='mt-10 px-10'>
       <HeaderDashboard />
       <div className='mt-10'>
         <div className='gap-3 grid md:grid-cols-3'>
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
+          {projects.length > 0 ? (
+            projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))
+          ) : (
+            <div className='flex justify-center'>
+            <p className='text-lg text-foreground-600'>No hay proyectos registrados</p>
+            </div>
+          )}
         </div>
       </div>
     </Container>

@@ -17,7 +17,6 @@ async function loadProjects() {
 
 async function ProyectosPage() {
   const projects = await loadProjects()
-  console.log(projects)
   return (
     <div className='mx-auto container justify-center mt-10 max-auto w-2/3'>
       <div className='flex gap-4 mb-8'>

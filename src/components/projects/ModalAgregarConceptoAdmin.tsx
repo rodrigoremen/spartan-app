@@ -21,7 +21,7 @@ function ModalAgregarConceptoAdmin({ id, cargarDatosConceptos }: { id: string, c
     };
     return (
         <>
-            <Button className="mb-3" onPress={onOpen} color="warning" variant="flat">Agregar acuerdo anterior</Button>
+            <Button className="mb-3" onPress={onOpen} color="warning" variant="flat">Agregar un concepto</Button>
             <Modal
                 backdrop={"blur"}
                 isOpen={isOpen}
@@ -31,7 +31,7 @@ function ModalAgregarConceptoAdmin({ id, cargarDatosConceptos }: { id: string, c
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Agrega un acuerdo anterior</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Agregar un concepto</ModalHeader>
                             <ModalBody>
                                 <div className="flex gap-x-3">
                                     <Textarea
